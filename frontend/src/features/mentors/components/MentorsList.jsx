@@ -1,9 +1,26 @@
 import React from "react";
 import mentor_profile_image from "../../../assets/mentor_profile.jpg";
+// import { motion, Variants } from "framer-motion";
+
+
+// const cardVariants = {
+//   offscreen: {
+//     y: 300
+//   },
+//   onscreen: {
+//     y: 50,
+//     rotate: -10,
+//     transition: {
+//       type: "spring",
+//       bounce: 0.4,
+//       duration: 0.8
+//     }
+//   }
+// };
 
 const MentorsList = () => {
   return (
-    <div className="mentors-section  ">
+    <div className="mentors-section mb-10 ">
       <div className="container mx-auto  flex flex-col gap-y-5 px-4 md:px-8">
         <h1 className="text-center text-2xl md:text-4xl font-bold ">
           Well Experienced <span className="text-[#0B545D]">Mentors</span>
