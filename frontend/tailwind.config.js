@@ -1,12 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+	darkMode: "class",
     content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
   	extend: {
+			colors: {
+        'teal-dark': '#0B545D',
+        'teal-light': '#4c9b97',
+      },
+      backgroundImage: {
+        'gradient-teal': 'linear-gradient(45deg, #0B545D, #4c9b97)',
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

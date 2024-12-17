@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { FaChevronRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoSearchOutline } from "react-icons/io5";
-import { IoMdClose } from "react-icons/io";
+import { IoMdSunny, IoMdMoon } from "react-icons/io";
 import Sidebar from "@/components/ui/Sidebar";
 import SearchContainer from "@/components/ui/SearchContainer";
 
@@ -14,16 +14,29 @@ const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("theme") === "dark"
+  );
 
   const { register, handleSubmit } = useForm();
 
+  // on search
   const onSearch = (data) => {
     console.log("Search Query:", data.query);
   };
 
+  // state management
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
   const toggleSideBar = () => setIsSidebarOpen(!isSidebarOpen);
   const toggleMobileSearch = () => setIsMobileSearchOpen(!isMobileSearchOpen);
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => {
+      const newTheme = !prev;
+      document.documentElement.classList.toggle("dark", newTheme);
+      localStorage.setItem("theme", newTheme ? "dark" : "light");
+      return newTheme;
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +45,11 @@ const Header = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    // Set initial theme
+    if (isDarkMode) document.documentElement.classList.add("dark");
+  }, [isDarkMode]);
 
   return (
     <nav
@@ -60,7 +78,9 @@ const Header = () => {
               onClick={toggleDropdown}
             >
               All Courses
-              <span>{isDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}</span>
+              <span>
+                {isDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}
+              </span>
             </button>
             {isDropdownOpen && (
               <div className="dropdown absolute left-0 mt-2 w-48 bg-[#0B545D] rounded shadow-md text-white p-3 z-10">
@@ -98,11 +118,22 @@ const Header = () => {
             </button>
           </form>
 
-          {/* Search Icon for Mobile */}
-          <button
-            onClick={toggleMobileSearch}
-            className="text-2xl xl:hidden"
+          {/* Theme Toggle Button */}
+          {/* <motion.button
+            onClick={toggleTheme}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600"
+            layout
+            whileTap={{ scale: 0.9 }}
           >
+            {isDarkMode ? (
+              <IoMdSunny className="text-yellow-400" size={20} />
+            ) : (
+              <IoMdMoon className="text-gray-800" size={20} />
+            )}
+          </motion.button> */}
+
+          {/* Search Icon for Mobile */}
+          <button onClick={toggleMobileSearch} className="text-2xl xl:hidden">
             <IoSearchOutline />
           </button>
 
@@ -124,15 +155,16 @@ const Header = () => {
         {/* Mobile Search Overlay */}
         <AnimatePresence>
           {isMobileSearchOpen && (
-            <SearchContainer toggleMobileSearch={toggleMobileSearch} onSearch={onSearch}/>
+            <SearchContainer
+              toggleMobileSearch={toggleMobileSearch}
+              onSearch={onSearch}
+            />
           )}
         </AnimatePresence>
 
         {/* Sidebar */}
         <AnimatePresence>
-          {isSidebarOpen && (
-           <Sidebar toggleSideBar={toggleSideBar}/>
-          )}
+          {isSidebarOpen && <Sidebar toggleSideBar={toggleSideBar} />}
         </AnimatePresence>
       </div>
     </nav>

@@ -41,18 +41,21 @@ const CourseList = () => {
     <div className="all-courses-list flex flex-col gap-y-5 mb-10">
       {/* Category Selection */}
       <div className="flex justify-center items-center">
-        <div className="course-category flex justify-center items-center gap-x-5 border rounded-full px-2 py-2 border-black">
+        <div className="course-category flex justify-center items-center gap-x-5  rounded-full px-2 py-0 bg-gradient-teal relative">
           {["jee", "neet", "cuet"].map((cat) => (
             <div
               key={cat}
-              className={`border px-3 py-2 min-w-[50px] md:min-w-[100px] text-center rounded-3xl cursor-pointer ${
-                category === cat
-                  ? "bg-[#0B545D] text-white border-white"
-                  : "border-black bg-[#EFF1E4]"
-              }`}
+              className={` px-1 md:px-3 py-2 min-w-[80px] md:min-w-[100px] text-center rounded-3xl cursor-pointer relative `}
               onClick={() => setCategory(cat)}
             >
-              <span className="text-sm md:text-lg">{cat}</span>
+              <span className="uppercase text-lg text-white">{cat}</span>
+              {category === cat && (
+                <motion.div
+                  className="absolute bottom-0 left-0 w-full h-[3px] bg-white rounded-full"
+                  layoutId="underline"
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
             </div>
           ))}
         </div>
@@ -93,7 +96,9 @@ const CourseList = () => {
                             alt={course.name}
                           />
                           <div className="course-details flex flex-col gap-y-2">
-                            <h3 className="text-[#0B545D] font-bold">Physics</h3>
+                            <h3 className="text-[#0B545D] font-bold">
+                              Physics
+                            </h3>
                             <p>
                               Lorem ipsum dolor sit amet, consectetur
                               adipisicing elit.
