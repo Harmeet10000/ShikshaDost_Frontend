@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Mentors from "./pages/Mentors";
 import { motion, useScroll, useSpring } from "framer-motion";
 
+import RegisterPage from "./pages/RegisterPage";
+
 function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -24,7 +26,9 @@ function App() {
           <Route path="/" element={<UserContainer />}>
             <Route index element={<Home />} />
             <Route path="mentors" element={<Mentors />} />
+            <Route path="register" element={<RegisterPage />} />
           </Route>
+          <Route />
         </Routes>
       </BrowserRouter>
     </>

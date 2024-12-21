@@ -8,6 +8,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { IoMdSunny, IoMdMoon } from "react-icons/io";
 import Sidebar from "@/components/ui/Sidebar";
 import SearchContainer from "@/components/ui/SearchContainer";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -84,14 +85,23 @@ const Header = () => {
             </button>
             {isDropdownOpen && (
               <div className="dropdown absolute left-0 mt-2 w-48 bg-[#0B545D] rounded shadow-md text-white p-3 z-10">
-                <a href="#" className="flex justify-between p-2 border-b">
-                  JEE <FaChevronRight />
+                <a href="#" className="group flex justify-between p-2 border-b">
+                  JEE{" "}
+                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <FaChevronRight />
+                  </span>
                 </a>
-                <a href="#" className="flex justify-between p-2 border-b">
-                  NEET <FaChevronRight />
+                <a href="#" className="group flex justify-between p-2 border-b">
+                  NEET{" "}
+                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <FaChevronRight />
+                  </span>
                 </a>
-                <a href="#" className="flex justify-between p-2">
-                  CUET <FaChevronRight />
+                <a href="#" className="group flex justify-between p-2">
+                  CUET{" "}
+                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <FaChevronRight />
+                  </span>
                 </a>
               </div>
             )}
@@ -111,7 +121,7 @@ const Header = () => {
             <input
               {...register("query")}
               placeholder="Search"
-              className="px-2 py-1 rounded-l-full border"
+              className="px-2 py-1 rounded-l-full border bg-gray-100  text-black"
             />
             <button className="px-2 py-1 bg-[#0B545D] text-white rounded-r-full">
               <IoSearchOutline />
@@ -144,12 +154,14 @@ const Header = () => {
         </div>
 
         <div className="hidden xl:flex items-center gap-x-3">
-          <button className="border border-[#0B545D] px-2 py-1 rounded">
-            Login
-          </button>
-          <button className="px-2 py-1 rounded bg-[#0B545D] text-white">
-            Signup
-          </button>
+         
+          <Link
+            to={"/register"}
+            className="px-2 py-2 rounded bg-[#0B545D] text-white"
+            aria-label="Signup to Shiksha-Dost"
+          >
+            <span>Register/Signup</span>
+          </Link>
         </div>
 
         {/* Mobile Search Overlay */}

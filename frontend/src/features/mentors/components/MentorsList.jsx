@@ -27,7 +27,7 @@ const MentorsList = () => {
                 </h2>
                 <p className="text-gray-600 mb-4">{mentor.description}</p>
                 <button className="px-5 py-2 bg-[#0B545D] text-white rounded-lg hover:bg-[#083D48] transition duration-300">
-                  View More
+                  View Profile
                 </button>
               </div>
             </div>

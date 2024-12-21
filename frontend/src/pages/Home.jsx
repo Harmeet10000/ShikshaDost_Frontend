@@ -5,6 +5,7 @@ import CourseSection from "@/features/courses/components/CourseSection";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 import MentorsSection from "@/features/mentors/components/MentorsSection";
+import MbbsAbroadSection from "@/components/MbbsAbroadSection";
 
 
 const Home = () => {
@@ -38,8 +39,10 @@ const Home = () => {
         </Helmet>
 
        
-        <CourseSection />
+        {/* <CourseSection /> */}
+        <MbbsAbroadSection/>
         <MentorsSection />
+        
 
       
     </HelmetProvider>
