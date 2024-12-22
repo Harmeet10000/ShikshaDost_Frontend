@@ -6,6 +6,13 @@ import { motion, useScroll, useSpring } from "framer-motion";
 
 import RegisterPage from "./pages/RegisterPage";
 
+import AdminContainer from "./layouts/adminLayout/AdminContainer";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import MentorsSection from "./pages/Admin/MentorsSection";
+import StudyMaterialSection from "./pages/Admin/StudyMaterialSection";
+import DailyPracticeSection from "./pages/Admin/DailyPracticeSection";
+import MBBSAbroadSection from "./pages/Admin/MBBSAbroadSection";
+
 function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -28,7 +35,13 @@ function App() {
             <Route path="mentors" element={<Mentors />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
-          <Route />
+          <Route path="/admin" element={<AdminContainer/>}>
+          <Route path="dashboard" element={<AdminDashboard/>}/>
+          <Route path="mentors" element={<MentorsSection/>}/>
+          <Route path="study-material" element={<StudyMaterialSection/>}/>
+          <Route path="daily-practice" element={<DailyPracticeSection/>}/>
+          <Route path="mbbs-abroad" element={<MBBSAbroadSection/>}/>
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
