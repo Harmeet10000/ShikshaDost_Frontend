@@ -1,5 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";  // Import React Query
+import { signupUser } from "@/services/api";
+import { toast } from "sonner";
+
 
 const Signup = () => {
   const {
@@ -9,16 +13,33 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
 
+  const mutation = useMutation({
+    mutationFn: signupUser,  // The function that will be called to sign up the user
+    onSuccess: (data) => {
+      console.log("Signup Successful:", data);
+      toast("Verification Email Sent");
+      if (data?.status === "success") {
+        sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
+      }
+
+      // You can add logic here like redirecting the user or showing a success message
+    },
+    onError: (error) => {
+      console.error("Signup Error:", error);
+      // Handle any errors that occur during the signup process
+    },
+  });
+
   const onSubmit = (data) => {
     console.log("Signup Data:", data);
+    mutation.mutate(data);  // Call the mutation to perform the API request
   };
 
-  // Watch password to validate confirm password
   const password = watch("password");
 
   return (
     <div className="flex flex-col items-center justify-center p-4 md:p-8 ">
-      <div className=" container">
+      <div className="container">
         <h1 className="text-xl md:text-2xl font-bold text-center mb-6 text-[#0B545D]">
           Create Your Account
         </h1>
@@ -120,7 +141,7 @@ const Signup = () => {
             type="submit"
             className="bg-gradient-teal mask-diagonal hover:hover-mask-diagonal transition-all duration-500 ease-in-out text-white py-2 px-4 rounded"
           >
-            Sign Up
+            {mutation.isLoading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
       </div>

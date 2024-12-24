@@ -9,8 +9,10 @@ import { IoMdSunny, IoMdMoon } from "react-icons/io";
 import Sidebar from "@/components/ui/Sidebar";
 import SearchContainer from "@/components/ui/SearchContainer";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
+  const { user, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -154,14 +156,20 @@ const Header = () => {
         </div>
 
         <div className="hidden xl:flex items-center gap-x-3">
-         
-          <Link
-            to={"/register"}
-            className="px-2 py-2 rounded bg-[#0B545D] text-white"
-            aria-label="Signup to Shiksha-Dost"
-          >
-            <span>Get Started</span>
-          </Link>
+          {user ? (
+            <div>
+              <span>Welcome, {user.name}</span>
+              <button onClick={logout}>Logout</button>
+            </div>
+          ) : (
+            <Link
+              to={"/register"}
+              className="px-2 py-2 rounded bg-[#0B545D] text-white"
+              aria-label="Signup to Shiksha-Dost"
+            >
+              <span>Get Started</span>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Search Overlay */}

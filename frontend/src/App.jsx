@@ -12,6 +12,7 @@ import MentorsSection from "./pages/Admin/MentorsSection";
 import StudyMaterialSection from "./pages/Admin/StudyMaterialSection";
 import DailyPracticeSection from "./pages/Admin/DailyPracticeSection";
 import MBBSAbroadSection from "./pages/Admin/MBBSAbroadSection";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -35,13 +36,14 @@ function App() {
             <Route path="mentors" element={<Mentors />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
-          <Route path="/admin" element={<AdminContainer/>}>
-          <Route path="dashboard" element={<AdminDashboard/>}/>
-          <Route path="mentors" element={<MentorsSection/>}/>
-          <Route path="study-material" element={<StudyMaterialSection/>}/>
-          <Route path="daily-practice" element={<DailyPracticeSection/>}/>
-          <Route path="mbbs-abroad" element={<MBBSAbroadSection/>}/>
+          <Route path="/admin" element={<AdminContainer />}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="mentors" element={<MentorsSection />} />
+            <Route path="study-material" element={<StudyMaterialSection />} />
+            <Route path="daily-practice" element={<DailyPracticeSection />} />
+            <Route path="mbbs-abroad" element={<MBBSAbroadSection />} />
           </Route>
+          <Route path="/verify-email/:token" element={<EmailVerificationPage/>}/>
         </Routes>
       </BrowserRouter>
     </>

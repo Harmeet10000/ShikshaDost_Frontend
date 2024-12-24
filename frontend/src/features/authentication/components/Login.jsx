@@ -1,15 +1,39 @@
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { loginUser } from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const [loginError, setLoginError] = useState("");
+
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) => {
+      login(data?.result.user);
+      console.log("Login Successful:", data);
+      // Store token or handle successful login
+      if (data?.status === "success") {
+        sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
+      }
+      setLoginError("");
+    },
+    onError: (error) => {
+      console.error("Login Failed:", error);
+      alert("Login failed. Please check your credentials.");
+      setLoginError("Login failed. Please check your credentials.");
+    },
+  });
+
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
+    mutation.mutate(data);
   };
 
   return (
@@ -20,6 +44,8 @@ const Login = () => {
         </h1>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
           {/* Email Field */}
+          {loginError && <span className="text-red-500">{loginError}</span>}
+
           <div className="mb-4">
             <label className="sr-only" htmlFor="email">
               Email
