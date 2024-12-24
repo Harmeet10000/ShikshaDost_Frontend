@@ -38,7 +38,7 @@ const Sidebar = ({ toggleSideBar }) => {
         </div>
         <Separator />
         <div className="p-2  cursor-pointer hover:text-white hover:font-bold ">
-          <span>Register</span>
+          <span>Get Started</span>
         </div>
         <Separator />
 

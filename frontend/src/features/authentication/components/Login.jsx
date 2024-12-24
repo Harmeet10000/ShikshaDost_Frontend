@@ -14,7 +14,7 @@ const Login = () => {
 
   return (
     <div className=" login-section flex flex-col items-center justify-center p-4 md:p-8 ">
-      <div className=" ">
+      <div className="container ">
         <h1 className=" text-xl md:text-2xl font-bold text-center mb-6 text-[#0B545D]">
           Login to Your Account
         </h1>

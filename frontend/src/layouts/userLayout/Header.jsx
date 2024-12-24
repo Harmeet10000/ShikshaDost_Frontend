@@ -160,7 +160,7 @@ const Header = () => {
             className="px-2 py-2 rounded bg-[#0B545D] text-white"
             aria-label="Signup to Shiksha-Dost"
           >
-            <span>Register/Signup</span>
+            <span>Get Started</span>
           </Link>
         </div>
 
