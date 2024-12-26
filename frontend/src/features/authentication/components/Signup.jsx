@@ -1,27 +1,27 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";  // Import React Query
+import { useMutation } from "@tanstack/react-query"; // Import React Query
 import { signupUser } from "@/services/api";
 import { toast } from "sonner";
-
 
 const Signup = () => {
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
   const mutation = useMutation({
-    mutationFn: signupUser,  // The function that will be called to sign up the user
+    mutationFn: signupUser, // The function that will be called to sign up the user
     onSuccess: (data) => {
       console.log("Signup Successful:", data);
       toast("Verification Email Sent");
       if (data?.status === "success") {
         sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
       }
-
+      reset();
       // You can add logic here like redirecting the user or showing a success message
     },
     onError: (error) => {
@@ -32,7 +32,7 @@ const Signup = () => {
 
   const onSubmit = (data) => {
     console.log("Signup Data:", data);
-    mutation.mutate(data);  // Call the mutation to perform the API request
+    mutation.mutate(data); // Call the mutation to perform the API request
   };
 
   const password = watch("password");
@@ -63,7 +63,9 @@ const Signup = () => {
               className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-[#0B545D] text-gray-700 py-2"
             />
             {errors.name && (
-              <span className="text-red-500 text-sm">{errors.name.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.name.message}
+              </span>
             )}
           </div>
 
@@ -86,7 +88,9 @@ const Signup = () => {
               className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-[#0B545D] text-gray-700 py-2"
             />
             {errors.email && (
-              <span className="text-red-500 text-sm">{errors.email.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
             )}
           </div>
 
@@ -109,7 +113,9 @@ const Signup = () => {
               className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-[#0B545D] text-gray-700 py-2"
             />
             {errors.password && (
-              <span className="text-red-500 text-sm">{errors.password.message}</span>
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
             )}
           </div>
 

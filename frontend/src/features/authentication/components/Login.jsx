@@ -3,12 +3,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { loginUser } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -22,8 +25,14 @@ const Login = () => {
       // Store token or handle successful login
       if (data?.status === "success") {
         sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
+        if (data?.result.user.role === "admin") {
+          navigate("/admin/dashboard"); // Navigate to the admin dashboard
+        } else {
+          navigate("/"); // Navigate to the home page for other users
+        }
       }
       setLoginError("");
+      reset();
     },
     onError: (error) => {
       console.error("Login Failed:", error);

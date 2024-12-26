@@ -2,10 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContainer from "./layouts/userLayout/UserContainer";
 import Home from "./pages/Home";
 import Mentors from "./pages/Mentors";
-import { motion, useScroll, useSpring } from "framer-motion";
-
 import RegisterPage from "./pages/RegisterPage";
-
 import AdminContainer from "./layouts/adminLayout/AdminContainer";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import MentorsSection from "./pages/Admin/MentorsSection";
@@ -13,6 +10,9 @@ import StudyMaterialSection from "./pages/Admin/StudyMaterialSection";
 import DailyPracticeSection from "./pages/Admin/DailyPracticeSection";
 import MBBSAbroadSection from "./pages/Admin/MBBSAbroadSection";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
+import { useAuth } from "@/context/AuthContext"; // Assuming your context provides user data
+import ProtectedRoute from "./features/ProtectedRoute/components/ProtectedRoute";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -31,19 +31,64 @@ function App() {
         />
 
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<UserContainer />}>
             <Route index element={<Home />} />
             <Route path="mentors" element={<Mentors />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
+
+          {/* Admin Routes with ProtectedRoute */}
           <Route path="/admin" element={<AdminContainer />}>
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="mentors" element={<MentorsSection />} />
-            <Route path="study-material" element={<StudyMaterialSection />} />
-            <Route path="daily-practice" element={<DailyPracticeSection />} />
-            <Route path="mbbs-abroad" element={<MBBSAbroadSection />} />
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute
+                  element={<AdminDashboard />}
+                  roles={["admin"]}
+                />
+              }
+            />
+            <Route
+              path="mentors"
+              element={
+                <ProtectedRoute
+                  element={<MentorsSection />}
+                  roles={["admin"]}
+                />
+              }
+            />
+            <Route
+              path="study-material"
+              element={
+                <ProtectedRoute
+                  element={<StudyMaterialSection />}
+                  roles={["admin"]}
+                />
+              }
+            />
+            <Route
+              path="daily-practice"
+              element={
+                <ProtectedRoute
+                  element={<DailyPracticeSection />}
+                  roles={["admin"]}
+                />
+              }
+            />
+            <Route
+              path="mbbs-abroad"
+              element={
+                <ProtectedRoute
+                  element={<MBBSAbroadSection />}
+                  roles={["admin"]}
+                />
+              }
+            />
           </Route>
-          <Route path="/verify-email/:token" element={<EmailVerificationPage/>}/>
+
+          {/* Email Verification Route */}
+          <Route path="/verify-email/:token" element={<EmailVerificationPage />} />
         </Routes>
       </BrowserRouter>
     </>
