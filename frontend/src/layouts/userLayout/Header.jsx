@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { FaChevronRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoSearchOutline } from "react-icons/io5";
-import { IoMdSunny, IoMdMoon } from "react-icons/io";
-import Sidebar from "@/components/ui/Sidebar";
-import SearchContainer from "@/components/ui/SearchContainer";
+
+import Sidebar from "@/components/Sidebar";
+import SearchContainer from "@/components/SearchContainer";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
@@ -56,7 +56,7 @@ const Header = () => {
 
   return (
     <nav
-      className={`header shadow-md mb-10 bg-white ${
+      className={`header shadow-md  bg-white ${
         isSticky ? "fixed top-0 left-0 w-full z-50" : ""
       } transition duration-300 ease-in`}
     >
@@ -123,9 +123,9 @@ const Header = () => {
             <input
               {...register("query")}
               placeholder="Search"
-              className="px-2 py-1 rounded-l-full border bg-gray-100  text-black"
+              className="px-2 py-2 rounded-l-full border bg-gray-100 w-96 text-black"
             />
-            <button className="px-2 py-1 bg-[#0B545D] text-white rounded-r-full">
+            <button className="px-2 py-2 bg-[#172e59] text-white rounded-r-full">
               <IoSearchOutline />
             </button>
           </form>
@@ -164,7 +164,7 @@ const Header = () => {
           ) : (
             <Link
               to={"/register"}
-              className="px-2 py-2 rounded bg-[#0B545D] text-white"
+              className="px-3 py-3 rounded bg-[#172e59] text-white text-lg"
               aria-label="Signup to Shiksha-Dost"
             >
               <span>Get Started</span>

@@ -7,6 +7,7 @@ import { FaChevronRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import CategorySidebar from "./CategorySidebar";
 import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Assuming Avatar component is part of Shadcn UI
+import { Link } from "react-router-dom";
 
 const Sidebar = ({ toggleSideBar }) => {
   const { user, logout } = useAuth();
@@ -50,11 +51,11 @@ const Sidebar = ({ toggleSideBar }) => {
         ) : (
           <>
             <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
-              <span>Home</span>
+              <Link to={"/"}><span>Home</span></Link>
             </div>
             <Separator />
             <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
-              <span>Get Started</span>
+            <Link to={"/register"}><span>Get Started</span></Link>
             </div>
             <Separator />
           </>

@@ -1,18 +1,20 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContainer from "./layouts/userLayout/UserContainer";
-import Home from "./pages/Home";
+
 import Mentors from "./pages/Mentors";
 import RegisterPage from "./pages/RegisterPage";
 import AdminContainer from "./layouts/adminLayout/AdminContainer";
-import AdminDashboard from "./pages/Admin/AdminDashboard";
-import MentorsSection from "./pages/Admin/MentorsSection";
-import StudyMaterialSection from "./pages/Admin/StudyMaterialSection";
-import DailyPracticeSection from "./pages/Admin/DailyPracticeSection";
+
 import MBBSAbroadSection from "./pages/Admin/MBBSAbroadSection";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
-import { useAuth } from "@/context/AuthContext"; // Assuming your context provides user data
-import ProtectedRoute from "./features/ProtectedRoute/components/ProtectedRoute";
+
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { motion, useScroll, useSpring } from "framer-motion";
+import Home from "./pages/Home";
+import AdminDashboard from "./pages/Admin/Statistics";
+import MentorsSection from "./pages/Admin/MentorsSection";
+import StudyMaterialSection from "./pages/Admin/StudyMaterialManagement";
+import DailyPracticeSection from "./pages/Admin/DppManagement";
 
 function App() {
   const { scrollYProgress } = useScroll();

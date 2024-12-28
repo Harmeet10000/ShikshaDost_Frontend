@@ -3,13 +3,13 @@ import React from "react";
 
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import MbbsAbroadSection from "./MbbsAbroadSection";
+import FeatureSection from "./FeatureSection";
+import MentorsSection from "./MentorsSection";
+import FeaturedArticles from "./FeaturedArticles";
+import FeaturedDailyPractice from "./FeaturedDailyPractice";
+import FaqSection from "./FaqSection";
 
-import MentorsSection from "@/pages/Home/MentorsSection";
-import MbbsAbroadSection from "@/pages/Home/MbbsAbroadSection";
-import FeatureSection from "@/pages/Home/FeatureSection";
-import FaqSection from "@/pages/Home/FaqSection";
-import FeaturedArticles from "@/pages/Home/FeaturedArticles";
-import FeaturedDailyPractice from "@/pages/Home/FeaturedDailyPractice";
 
 
 const Home = () => {

@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
 
 // Dynamically import the chart components
-const UserCharts = React.lazy(() => import("@/features/charts/components/UserCharts"));
-const MenteeCharts = React.lazy(() => import("@/features/charts/components/MenteeCharts"));
-const RevenueCharts = React.lazy(() => import("@/features/charts/components/RevenueCharts"));
+const UserCharts = React.lazy(() => import("./UserCharts"));
+const MenteeCharts = React.lazy(() => import("./MenteeCharts"));
+const RevenueCharts = React.lazy(() => import("./RevenueCharts"));
 
 const AdminDashboard = () => {
   return (
