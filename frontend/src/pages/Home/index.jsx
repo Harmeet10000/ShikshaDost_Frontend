@@ -9,6 +9,7 @@ import MentorsSection from "./MentorsSection";
 import FeaturedArticles from "./FeaturedArticles";
 import FeaturedDailyPractice from "./FeaturedDailyPractice";
 import FaqSection from "./FaqSection";
+import HeroSection from "./HeroSection";
 
 
 
@@ -44,8 +45,10 @@ const Home = () => {
 
        
         {/* <CourseSection /> */}
-        <MbbsAbroadSection/>
+        <HeroSection/>
         <FeatureSection/>
+        <MbbsAbroadSection/>
+      
         <MentorsSection />
         <FeaturedArticles/>
         <FeaturedDailyPractice/>

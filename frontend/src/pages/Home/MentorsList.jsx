@@ -21,7 +21,7 @@ const MentorCard = ({ mentor }) => {
         <h2 className="text-xl font-bold text-[#172e59] mb-3">
           {mentor.name}
         </h2>
-        <p className="text-gray-600 mb-4 text-sm line-clamp-3">{mentor.description}</p>
+        <p className="text-gray-600 mb-4 text-sm line-clamp-3">{mentor.bio}</p>
         <button className="px-4 py-2 bg-[#172e59] text-white rounded-lg hover:bg-[#0f1f3d] transition-all duration-300 text-sm font-medium shadow-lg shadow-[#172e59]/20 hover:shadow-[#172e59]/30">
           View Profile
         </button>

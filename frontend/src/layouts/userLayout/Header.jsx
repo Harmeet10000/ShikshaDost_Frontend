@@ -10,6 +10,9 @@ import Sidebar from "@/components/Sidebar";
 import SearchContainer from "@/components/SearchContainer";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { IoIosLogOut } from "react-icons/io";
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -56,12 +59,13 @@ const Header = () => {
 
   return (
     <nav
-      className={`header shadow-md  bg-white ${
+      className={`header shadow-md bg-white ${
         isSticky ? "fixed top-0 left-0 w-full z-50" : ""
       } transition duration-300 ease-in`}
     >
       <div className="container flex items-center justify-between gap-x-5 md:gap-x-10 mx-auto px-4">
-        {/* Logo */}
+       
+        <div className="flex justify-between items-center gap-x-5">
         <a href="/">
           <img
             className="company-logo w-16 h-16 xl:w-24 xl:h-24"
@@ -69,13 +73,41 @@ const Header = () => {
             alt="Company Logo"
           />
         </a>
+        <div className="flex gap-x-5 items-center px-3 py-2 rounded-full border bg-gray-100">
+        
+          <form onSubmit={handleSubmit(onSearch)} className="hidden xl:flex">
+            <input
+              {...register("query")}
+              placeholder="What are you looking for?"
+              className="px-2 py-2  border-none bg-gray-100 w-96 text-black focus:outline-none focus:ring-0 focus:border-transparent"
+            />
+            <button className="px-3 bg-[#172e59] text-white rounded-full">
+              <IoSearchOutline />
+            </button>
+          </form>
 
+         
+          <button onClick={toggleMobileSearch} className="text-2xl xl:hidden">
+            <IoSearchOutline />
+          </button>
+
+        
+          <div className="text-2xl xl:hidden" onClick={toggleSideBar}>
+            <GiHamburgerMenu />
+          </div>
+        </div>
+        </div>
+      
+        
+       
         {/* Header List */}
-        <div className="hidden xl:flex items-center gap-x-5 font-semibold">
+
+        <div className="hidden xl:flex items-center gap-x-5 relative">
+        <div className="flex items-center gap-x-5 font-semibold">
           <a href="#" className="header-item">
             MBBS Abroad
           </a>
-          <div className="relative">
+          {/* <div className="relative">
             <button
               className="flex items-center gap-x-1"
               onClick={toggleDropdown}
@@ -88,26 +120,26 @@ const Header = () => {
             {isDropdownOpen && (
               <div className="dropdown absolute left-0 mt-2 w-48 bg-[#0B545D] rounded shadow-md text-white p-3 z-10">
                 <a href="#" className="group flex justify-between p-2 border-b">
-                  JEE{" "}
+                  JEE
                   <span className="transform group-hover:translate-x-2 transition-transform duration-300">
                     <FaChevronRight />
                   </span>
                 </a>
                 <a href="#" className="group flex justify-between p-2 border-b">
-                  NEET{" "}
+                  NEET
                   <span className="transform group-hover:translate-x-2 transition-transform duration-300">
                     <FaChevronRight />
                   </span>
                 </a>
                 <a href="#" className="group flex justify-between p-2">
-                  CUET{" "}
+                  CUET
                   <span className="transform group-hover:translate-x-2 transition-transform duration-300">
                     <FaChevronRight />
                   </span>
                 </a>
               </div>
             )}
-          </div>
+          </div> */}
           <a href="/mentors" className="header-item">
             Mentors
           </a>
@@ -116,50 +148,18 @@ const Header = () => {
           </a>
         </div>
 
-        {/* Search Box and Menu */}
-        <div className="flex gap-x-5 items-center">
-          {/* Search Input (Hidden on Mobile) */}
-          <form onSubmit={handleSubmit(onSearch)} className="hidden xl:flex">
-            <input
-              {...register("query")}
-              placeholder="Search"
-              className="px-2 py-2 rounded-l-full border bg-gray-100 w-96 text-black"
-            />
-            <button className="px-2 py-2 bg-[#172e59] text-white rounded-r-full">
-              <IoSearchOutline />
-            </button>
-          </form>
-
-          {/* Theme Toggle Button */}
-          {/* <motion.button
-            onClick={toggleTheme}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-600"
-            layout
-            whileTap={{ scale: 0.9 }}
-          >
-            {isDarkMode ? (
-              <IoMdSunny className="text-yellow-400" size={20} />
-            ) : (
-              <IoMdMoon className="text-gray-800" size={20} />
-            )}
-          </motion.button> */}
-
-          {/* Search Icon for Mobile */}
-          <button onClick={toggleMobileSearch} className="text-2xl xl:hidden">
-            <IoSearchOutline />
-          </button>
-
-          {/* Hamburger Menu */}
-          <div className="text-2xl xl:hidden" onClick={toggleSideBar}>
-            <GiHamburgerMenu />
-          </div>
-        </div>
-
-        <div className="hidden xl:flex items-center gap-x-3">
           {user ? (
-            <div>
-              <span>Welcome, {user.name}</span>
-              <button onClick={logout}>Logout</button>
+            <div
+              className="user-profile cursor-pointer flex items-center gap-2"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              {/* <span>
+                {isDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}
+              </span> */}
             </div>
           ) : (
             <Link
@@ -169,6 +169,61 @@ const Header = () => {
             >
               <span>Get Started</span>
             </Link>
+          )}
+
+          {user && isDropdownOpen && (
+            <div className="absolute top-12 right-0 w-48 bg-white rounded shadow-md border z-50">
+              <div>
+                <div>
+                  <div className="group px-4 py-2 flex items-center  transition-all font-bold">
+                    <Avatar className="w-8 h-8 mr-2">
+                      <AvatarImage src="https://github.com/shadcn.png" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    {user?.name || "User"}
+                  </div>
+                  <Separator />
+                </div>
+
+                <div className="flex flex-col ">
+                  <a
+                    href="#"
+                    className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
+                  >
+                    Your Profile
+                  </a>
+                  <a
+                    href="#"
+                    className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
+                  >
+                    Your Quizzes
+                  </a>
+                  <a
+                    href="#"
+                    className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
+                  >
+                    Your Mentors
+                  </a>
+                  <a
+                    href="#"
+                    className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
+                  >
+                    Your Articles
+                  </a>
+                  <Separator />
+                </div>
+
+                <div
+                  className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform flex justify-between items-center cursor-pointer"
+                  onClick={logout}
+                >
+                  Logout
+                  <span className="text-2xl">
+                    <IoIosLogOut />
+                  </span>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 

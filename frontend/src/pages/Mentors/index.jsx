@@ -2,7 +2,7 @@ import React from 'react'
 
 const Mentors = () => {
   return (
-    <div>Mentors</div>
+    <div>mentors</div>
   )
 }
 

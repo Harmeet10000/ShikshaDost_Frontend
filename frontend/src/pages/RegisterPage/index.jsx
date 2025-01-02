@@ -1,8 +1,8 @@
 import FlipCard from "@/components/FlipCard";
-import MentorRegistration from "@/features/authentication/components/MentorRegistration";
-import UserRegistration from "@/features/authentication/components/UserRegistration";
+import MentorRegistration from "@/pages/Authentication/MentorRegistration";
+import UserRegistration from "@/pages/Authentication/UserRegistration";
 import React, { useState } from "react";
-import background from "../assets/registerPageBg.jpg";
+import background from "../../assets/registerPageBg.jpg";
 
 const RegisterPage = () => {
   const [isFlipped, setIsFlipped] = useState(false);

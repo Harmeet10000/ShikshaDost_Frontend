@@ -1,20 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContainer from "./layouts/userLayout/UserContainer";
 
-import Mentors from "./pages/Mentors";
+
 import RegisterPage from "./pages/RegisterPage";
 import AdminContainer from "./layouts/adminLayout/AdminContainer";
 
 import MBBSAbroadSection from "./pages/Admin/MBBSAbroadSection";
 import EmailVerificationPage from "./pages/EmailVerificationPage";
 
-import ProtectedRoute from "@/components/ProtectedRoute";
+import ProtectedRoute from "@/features/RoutesAuthentication/ProtectedRoute";
 import { motion, useScroll, useSpring } from "framer-motion";
-import Home from "./pages/Home";
+
 import AdminDashboard from "./pages/Admin/Statistics";
 import MentorsSection from "./pages/Admin/MentorsSection";
 import StudyMaterialSection from "./pages/Admin/StudyMaterialManagement";
 import DailyPracticeSection from "./pages/Admin/DppManagement";
+import AuthRedirect from "./features/RoutesAuthentication/AuthRedirect";
+
+import SingleMentor from "./pages/SingleMentor";
+import Home from "./pages/Home";
+import Mentors from "./pages/Mentors";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -34,10 +39,11 @@ function App() {
 
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<UserContainer />}>
-            <Route index element={<Home />} />
-            <Route path="mentors" element={<Mentors />} />
-            <Route path="register" element={<RegisterPage />} />
+          <Route path="/" element={<AuthRedirect element={<UserContainer />} />}>
+            <Route index element={<AuthRedirect element={<Home/>} />} />
+            <Route path="mentors" element={<AuthRedirect element={<Mentors />}/>} />
+            <Route path="mentors/:mentorId" element={<AuthRedirect element={<SingleMentor />}/>}  />
+            <Route path="register" element={<AuthRedirect element={<RegisterPage />} />} />
           </Route>
 
           {/* Admin Routes with ProtectedRoute */}

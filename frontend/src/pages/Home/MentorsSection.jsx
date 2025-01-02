@@ -1,5 +1,6 @@
 import ShimmerButton from "@/components/ui/shimmer-button";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const MentorsList = React.lazy(() => import("./MentorsList"));
 
@@ -13,9 +14,11 @@ const MentorsSection = () => {
           <h1 className="text-center text-2xl md:text-4xl font-bold">
             Well Experienced Mentors
           </h1>
+          <Link to="/mentors">
           <ShimmerButton className="px-4 py-2 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-lg font-medium hover:opacity-90">
-            View All Mentors
+           View All Mentors
           </ShimmerButton>
+          </Link>
         </div>
 
         {/* Mentor Cards */}

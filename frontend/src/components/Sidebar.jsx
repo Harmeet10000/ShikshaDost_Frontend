@@ -20,13 +20,30 @@ const Sidebar = ({ toggleSideBar }) => {
   return (
     <>
       <motion.div
-        initial={{ x: "-100%" }}
+        initial={{ x: "100%" }}
         animate={{ x: 0 }}
-        exit={{ x: "-100%" }}
+        exit={{ x: "100%" }}
         transition={{ duration: 0.3 }}
-        className="fixed top-0 left-0 h-full w-64 bg-gradient-teal shadow-lg z-50 flex flex-col p-5"
+        className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 flex flex-col p-5"
       >
-        <div className="flex justify-end items-center mb-5">
+        <div className="flex justify-between items-center mb-5">
+          <div>
+            {user && (
+              <div className="flex items-center ">
+                <Avatar className="mr-3">
+                  <AvatarImage
+                    src={user?.image || "https://github.com/shadcn.png"}
+                    alt={user?.name}
+                  />
+                  <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className=" font-bold">{user?.name}</p>
+                  {/* <p className=" text-sm">{user?.email}</p> */}
+                </div>
+              </div>
+            )}
+          </div>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -36,48 +53,58 @@ const Sidebar = ({ toggleSideBar }) => {
             <IoMdClose />
           </motion.button>
         </div>
-
-        {user ? (
-          <div className="flex items-center mb-5">
-            <Avatar className="mr-3">
-              <AvatarImage src={user?.image || "/path/to/default-avatar.png"} alt={user?.username} />
-              <AvatarFallback>{user?.username?.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-white font-bold">{user?.username}</p>
-              <p className="text-white text-sm">{user?.email}</p>
-            </div>
-          </div>
-        ) : (
+        <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300 ">
+          <Link to={"/"}>
+            <span>Home</span>
+          </Link>
+        </div>
+        <Separator />
+        {!user && (
           <>
-            <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
-              <Link to={"/"}><span>Home</span></Link>
+            <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+              <Link to={"/register"}>
+                <span>Get Started</span>
+              </Link>
             </div>
             <Separator />
-            <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
-            <Link to={"/register"}><span>Get Started</span></Link>
+          </>
+        )}
+        {user && (
+          <>
+            <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+              <a href="#">Your Profile</a>
+            </div>
+            <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+              <a href="#">Your Mentorship</a>
+            </div>
+            <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+              <a href="#">Your Articles</a>
+            </div>
+            <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+              <a href="#">Your Quizzes</a>
             </div>
             <Separator />
           </>
         )}
 
-        <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
+        <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
           <a href="#">MBBS Abroad</a>
         </div>
-        <Separator />
-        <div className="group p-2 cursor-pointer hover:text-white hover:font-bold flex justify-between items-center" onClick={toggleCategorySidebar}>
-          <a href="#">All Courses</a>
-          <span className="group-hover:text-white transform group-hover:translate-x-2 transition-transform duration-300">
+        <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
+          <a href="/mentors">Mentors</a>
+        </div>
+
+        <div
+          className="group p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300 flex justify-between items-center"
+          onClick={toggleCategorySidebar}
+        >
+          <a href="#">Study Material</a>
+          <span className=" transform group-hover:translate-x-2 transition-transform duration-300 group-hover:text-green-500">
             <FaChevronRight />
           </span>
         </div>
 
-        <Separator />
-        <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
-          <a href="/mentors">Mentors</a>
-        </div>
-        <Separator />
-        <div className="p-2 cursor-pointer hover:text-white hover:font-bold">
+        <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
           <a href="#">Articles</a>
         </div>
         <Separator />
@@ -85,7 +112,7 @@ const Sidebar = ({ toggleSideBar }) => {
         {/* Logout button */}
         {user && (
           <div
-            className="p-2 flex justify-between items-center cursor-pointer hover:text-white hover:font-bold"
+            className="p-2 flex justify-between items-center cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300"
             onClick={logout}
           >
             Logout
@@ -94,10 +121,11 @@ const Sidebar = ({ toggleSideBar }) => {
             </span>
           </div>
         )}
-        <Separator />
       </motion.div>
       <AnimatePresence>
-        {categorySidebar && <CategorySidebar toggleCategorySidebar={toggleCategorySidebar} />}
+        {categorySidebar && (
+          <CategorySidebar toggleCategorySidebar={toggleCategorySidebar} />
+        )}
       </AnimatePresence>
     </>
   );

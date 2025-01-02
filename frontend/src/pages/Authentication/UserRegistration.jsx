@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { LogIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Login from "@/features/authentication/components/Login";
-import Signup from "@/features/authentication/components/Signup";
+import Login from "@/pages/Authentication/Login";
+import Signup from "@/pages/Authentication/Signup";
 
 const UserRegistration = ({ onFlip }) => {
   const [selectedTab, setSelectedTab] = useState("login");
 
   return (
-    <div className="bg-white border p-4 rounded-lg shadow-lg w-full max-w-md h-[550px]">
+    <div className="bg-white border p-4 rounded-lg shadow-lg w-full max-w-md h-[580px]">
       <nav className="flex justify-between items-center relative">
         {["login", "signup"].map((item) => (
           <div
             key={item}
-            className={`px-1 md:px-3 py-2 w-3/6 text-center rounded-3xl cursor-pointer relative `}
+            className={`px-1 md:px-3 py-2 w-3/6 text-center rounded-3xl cursor-pointer relative`}
             onClick={() => setSelectedTab(item)}
           >
             <span className="text-lg">
@@ -34,7 +34,7 @@ const UserRegistration = ({ onFlip }) => {
           </div>
         ))}
       </nav>
-      <main className=" ">
+      <main className="mt-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedTab ? selectedTab.label : "empty"}
@@ -47,10 +47,17 @@ const UserRegistration = ({ onFlip }) => {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      <div className="flex items-center my-4">
+        <hr className="flex-grow border-gray-300" />
+        <span className="px-4 text-gray-500 text-sm">or</span>
+        <hr className="flex-grow border-gray-300" />
+      </div>
+
       <button
         type="button"
         onClick={onFlip}
-        className="w-full mt-4 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition duration-200"
+        className="w-full flex items-center justify-center gap-2 bg-black text-white py-2 rounded-md hover:bg-gray-800 transition duration-200"
       >
         <LogIn size={20} />
         Login as Mentor
