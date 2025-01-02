@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import GridPattern from "@/components/ui/grid-pattern";
+import ShimmerButton from "@/components/ui/shimmer-button";
 
 const MbbsAbroadSection = () => {
   return (
@@ -53,7 +54,8 @@ const MbbsAbroadSection = () => {
         </motion.p>
 
         {/* Animated Button */}
-        <motion.button
+        <ShimmerButton className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-white transition-all">Explore</ShimmerButton>
+        {/* <motion.button
           className="px-5 py-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded font-bold text-xl shadow-md"
           whileInView={{ opacity: 1, scale: 1 }}
           initial={{ opacity: 0, scale: 0.8 }}
@@ -63,7 +65,7 @@ const MbbsAbroadSection = () => {
           whileTap={{ scale: 0.9 }}
         >
           Explore
-        </motion.button>
+        </motion.button> */}
       </div>
     </section>
   );

@@ -63,90 +63,52 @@ const Header = () => {
         isSticky ? "fixed top-0 left-0 w-full z-50" : ""
       } transition duration-300 ease-in`}
     >
-      <div className="container flex items-center justify-between gap-x-5 md:gap-x-10 mx-auto px-4">
-       
+      <div className="container flex items-center justify-between gap-x-5 md:gap-x-10 mx-auto px-4 ">
         <div className="flex justify-between items-center gap-x-5">
-        <a href="/">
-          <img
-            className="company-logo w-16 h-16 xl:w-24 xl:h-24"
-            src={company_logo}
-            alt="Company Logo"
-          />
-        </a>
-        <div className="flex gap-x-5 items-center px-3 py-2 rounded-full border bg-gray-100">
-        
-          <form onSubmit={handleSubmit(onSearch)} className="hidden xl:flex">
-            <input
-              {...register("query")}
-              placeholder="What are you looking for?"
-              className="px-2 py-2  border-none bg-gray-100 w-96 text-black focus:outline-none focus:ring-0 focus:border-transparent"
+          <a href="/">
+            <img
+              className="company-logo w-16 h-16 xl:w-24 xl:h-24"
+              src={company_logo}
+              alt="Company Logo"
             />
-            <button className="px-3 bg-[#172e59] text-white rounded-full">
-              <IoSearchOutline />
-            </button>
-          </form>
-
-         
+          </a>
+          <div className="hidden xl:flex gap-x-5 items-center px-3 py-2 rounded-full border bg-gray-100">
+            <form onSubmit={handleSubmit(onSearch)} className="hidden xl:flex">
+              <input
+                {...register("query")}
+                placeholder="What are you looking for?"
+                className="px-2 py-2  border-none bg-gray-100 w-96 text-black focus:outline-none focus:ring-0 focus:border-transparent"
+              />
+              <button className="px-3 bg-[#172e59] text-white rounded-full">
+                <IoSearchOutline />
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className="flex justify-center items-center gap-x-3">
           <button onClick={toggleMobileSearch} className="text-2xl xl:hidden">
             <IoSearchOutline />
           </button>
 
-        
           <div className="text-2xl xl:hidden" onClick={toggleSideBar}>
             <GiHamburgerMenu />
           </div>
         </div>
-        </div>
-      
-        
-       
         {/* Header List */}
 
         <div className="hidden xl:flex items-center gap-x-5 relative">
-        <div className="flex items-center gap-x-5 font-semibold">
-          <a href="#" className="header-item">
-            MBBS Abroad
-          </a>
-          {/* <div className="relative">
-            <button
-              className="flex items-center gap-x-1"
-              onClick={toggleDropdown}
-            >
-              All Courses
-              <span>
-                {isDropdownOpen ? <FaChevronUp /> : <FaChevronDown />}
-              </span>
-            </button>
-            {isDropdownOpen && (
-              <div className="dropdown absolute left-0 mt-2 w-48 bg-[#0B545D] rounded shadow-md text-white p-3 z-10">
-                <a href="#" className="group flex justify-between p-2 border-b">
-                  JEE
-                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <FaChevronRight />
-                  </span>
-                </a>
-                <a href="#" className="group flex justify-between p-2 border-b">
-                  NEET
-                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <FaChevronRight />
-                  </span>
-                </a>
-                <a href="#" className="group flex justify-between p-2">
-                  CUET
-                  <span className="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <FaChevronRight />
-                  </span>
-                </a>
-              </div>
-            )}
-          </div> */}
-          <a href="/mentors" className="header-item">
-            Mentors
-          </a>
-          <a href="#" className="header-item">
-            Articles
-          </a>
-        </div>
+          <div className="flex items-center gap-x-5 font-semibold">
+            <a href="#" className="header-item">
+              MBBS Abroad
+            </a>
+
+            <a href="/mentors" className="header-item">
+              Mentors
+            </a>
+            <a href="#" className="header-item">
+              Articles
+            </a>
+          </div>
 
           {user ? (
             <div
