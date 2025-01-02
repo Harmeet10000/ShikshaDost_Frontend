@@ -14,11 +14,11 @@ const RegisterPage = () => {
   return (
     <>
       <div
-        className="h-[750px] md:min-h-screen flex items-center justify-center relative bg-cover bg-center  rounded-b-[50px] md:rounded-b-[100px]"
+        className="h-[750px] md:min-h-screen flex items-center justify-center relative bg-cover bg-center  "
         style={{ backgroundImage: `url(${background})` }}
       >
         {/* Overlay */}
-        <div className="absolute inset-0 bg-[#172e59] opacity-70 rounded-b-[50px] md:rounded-b-[100px] "></div>
+        <div className="absolute inset-0 bg-[#172e59] opacity-70 "></div>
 
         {/* Content */}
         <div className="relative w-full max-w-md z-10 rounded-xl">
