@@ -29,10 +29,10 @@ const FeatureSection = () => {
     <section className="py-20">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">
-          Why Choose{" "}
+          Why {" "}
           <TypingAnimation
             as="span"
-            className="bg-gradient-to-r from-teal-400 to-blue-500 bg-clip-text text-transparent inline-block"
+            className=" bg-clip-text text-black text-3xl inline-block"
             duration={150}
             delay={500}
             startOnView={true}
