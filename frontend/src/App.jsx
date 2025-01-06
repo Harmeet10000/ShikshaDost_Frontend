@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContainer from "./layouts/userLayout/UserContainer";
 
-
 import RegisterPage from "./pages/RegisterPage";
 import AdminContainer from "./layouts/adminLayout/AdminContainer";
 
@@ -20,6 +19,7 @@ import AuthRedirect from "./features/RoutesAuthentication/AuthRedirect";
 import SingleMentor from "./pages/SingleMentor";
 import Home from "./pages/Home";
 import Mentors from "./pages/Mentors";
+import ArticlesPage from "./pages/ArticlesPage";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -39,11 +39,27 @@ function App() {
 
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<AuthRedirect element={<UserContainer />} />}>
-            <Route index element={<AuthRedirect element={<Home/>} />} />
-            <Route path="mentors" element={<AuthRedirect element={<Mentors />}/>} />
-            <Route path="mentors/:mentorId" element={<AuthRedirect element={<SingleMentor />}/>}  />
-            <Route path="register" element={<AuthRedirect element={<RegisterPage />} />} />
+          <Route
+            path="/"
+            element={<AuthRedirect element={<UserContainer />} />}
+          >
+            <Route index element={<AuthRedirect element={<Home />} />} />
+            <Route
+              path="mentors"
+              element={<AuthRedirect element={<Mentors />} />}
+            />
+            <Route
+              path="mentors/:mentorId"
+              element={<AuthRedirect element={<SingleMentor />} />}
+            />
+            <Route
+              path="articles"
+              element={<AuthRedirect element={<ArticlesPage />} />}
+            />
+            <Route
+              path="register"
+              element={<AuthRedirect element={<RegisterPage />} />}
+            />
           </Route>
 
           {/* Admin Routes with ProtectedRoute */}
@@ -96,7 +112,10 @@ function App() {
           </Route>
 
           {/* Email Verification Route */}
-          <Route path="/verify-email/:token" element={<EmailVerificationPage />} />
+          <Route
+            path="/verify-email/:token"
+            element={<EmailVerificationPage />}
+          />
         </Routes>
       </BrowserRouter>
     </>

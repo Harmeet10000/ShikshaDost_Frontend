@@ -105,7 +105,7 @@ const Header = () => {
             <a href="/mentors" className="header-item">
               Mentors
             </a>
-            <a href="#" className="header-item">
+            <a href="/articles" className="header-item">
               Articles
             </a>
           </div>
