@@ -1,5 +1,5 @@
 import React from "react";
-import mentor_profile_image from "../../assets/mentor_profile.jpg";
+import mentor_profile_image from "../../../assets/mentor_profile.jpg";
 import { mentors } from "@/data/mentors";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/ui/marquee";

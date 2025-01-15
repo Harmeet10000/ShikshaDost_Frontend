@@ -1,7 +1,7 @@
 import React from "react";
 import { ThumbsUp, MessageCircle, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
-import article_thumbnail from "../../assets/article.jpg"
+import article_thumbnail from "../../../assets/article.jpg"
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },

@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import mentor1 from "../../assets/mentor1.jpg";
-import mentor2 from "../../assets/mentor2.jpg";
-import mentor3 from "../../assets/mentor3.jpg";
+import mentor1 from "../../../assets/mentor1.jpg";
+import mentor2 from "../../../assets/mentor2.jpg";
+import mentor3 from "../../../assets/mentor3.jpg";
 import GridPattern from "@/components/ui/grid-pattern";
 import ShimmerButton from "@/components/ui/shimmer-button";
-import hero from "../../assets/hero.jpg";
+import hero from "../../../assets/hero.jpg";
 
 const HeroSection = () => {
   const fadeIn = {

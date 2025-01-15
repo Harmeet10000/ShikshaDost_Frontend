@@ -16,10 +16,10 @@ import StudyMaterialSection from "./pages/Admin/StudyMaterialManagement";
 import DailyPracticeSection from "./pages/Admin/DppManagement";
 import AuthRedirect from "./features/RoutesAuthentication/AuthRedirect";
 
-import SingleMentor from "./pages/SingleMentor";
-import Home from "./pages/Home";
-import Mentors from "./pages/Mentors";
-import ArticlesPage from "./pages/ArticlesPage";
+import SingleMentor from "./pages/userPages/SingleMentor";
+import Home from "./pages/userPages/Home";
+import Mentors from "./pages/userPages/Mentors";
+import ArticlesPage from "./pages/userPages/ArticlesPage";
 import MentorDashboard from "./pages/MentorDashboard/Dashboard";
 
 function App() {

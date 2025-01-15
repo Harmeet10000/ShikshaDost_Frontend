@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import GridPattern from "@/components/ui/grid-pattern";
-import article_gif from "../../assets/articlePage.gif"
+import article_gif from "../../../assets/articlePage.gif"
 const ArticlePageBanner = () => {
   return (
     <section className="relative articlespage-hero-section space-y-2 py-10 px-4 bg-[#172e59] rounded-xl overflow-hidden">
