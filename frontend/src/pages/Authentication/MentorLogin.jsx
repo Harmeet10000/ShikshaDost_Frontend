@@ -29,7 +29,7 @@ const MentorLogin = () => {
         if (data?.result.user.role === "admin") {
           navigate("/admin/dashboard"); // Navigate to the admin dashboard
         } else if(data?.result.user.role === "mentor") {
-          navigate("/mentor-dashboard"); 
+          navigate("/mentor/dashboard"); 
         } else {
           navigate("/"); // Navigate to the home page for other users
         }

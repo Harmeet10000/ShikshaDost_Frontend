@@ -21,6 +21,7 @@ import Home from "./pages/userPages/Home";
 import Mentors from "./pages/userPages/Mentors";
 import ArticlesPage from "./pages/userPages/ArticlesPage";
 import MentorDashboard from "./pages/MentorDashboard/Dashboard";
+import MentorContainer from "./layouts/mentorsLayout/MentorContainer";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -112,8 +113,9 @@ function App() {
             />
           </Route>
 
-          <Route path="/mentor-dashboard" element={<MentorDashboard/>}/>
-
+          <Route path="/mentor" element={<MentorContainer/>}>
+           <Route path="dashboard" element={<MentorDashboard/>}/>
+          </Route>
           {/* Email Verification Route */}
           <Route
             path="/verify-email/:token"
