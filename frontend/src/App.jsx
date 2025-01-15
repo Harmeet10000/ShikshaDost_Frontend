@@ -20,6 +20,7 @@ import SingleMentor from "./pages/SingleMentor";
 import Home from "./pages/Home";
 import Mentors from "./pages/Mentors";
 import ArticlesPage from "./pages/ArticlesPage";
+import MentorDashboard from "./pages/MentorDashboard/Dashboard";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -110,6 +111,8 @@ function App() {
               }
             />
           </Route>
+
+          <Route path="/mentor-dashboard" element={<MentorDashboard/>}/>
 
           {/* Email Verification Route */}
           <Route

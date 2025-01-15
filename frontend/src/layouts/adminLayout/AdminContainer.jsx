@@ -7,19 +7,25 @@ const AdminContainer = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex">
-      <div
-        className={`sticky top-0 h-screen bg-[#172e59] ${isSidebarCollapsed ? "py-5 px-2" : "p-5"} overflow-y-auto transition-all duration-300 ${
-          isSidebarCollapsed ? "max-w-[80px]" : "max-w-[250px]"
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <aside
+        className={`bg-[#172e59] transition-all duration-300 overflow-y-auto ${
+          isSidebarCollapsed ? "max-w-[80px] py-5 px-2" : "max-w-[250px] p-5"
         }`}
+        aria-expanded={!isSidebarCollapsed}
       >
         <AdminSidebar isCollapsed={isSidebarCollapsed} />
-      </div>
-      <div className="flex-1 border">
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
         <AdminHeader
-          onToggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          onToggleSidebar={() => setIsSidebarCollapsed((prev) => !prev)}
         />
-        <Outlet />
+        <main className="flex-1 overflow-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

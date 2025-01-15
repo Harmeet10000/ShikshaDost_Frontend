@@ -5,7 +5,14 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "types": [
+      "babel__traverse",
+      "estree",
+      "json-schema"
+    ]
+      
+
     }
     // ...
   }

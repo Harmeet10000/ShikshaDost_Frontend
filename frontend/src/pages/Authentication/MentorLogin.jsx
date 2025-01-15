@@ -1,21 +1,13 @@
-// import React from 'react'
 
-// const MentorLogin = () => {
-//   return (
-//     <div>MentorLogin</div>
-//   )
-// }
-
-// export default MentorLogin
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { loginUser } from "@/services/api";
+import { loginMentor } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const MentorLogin = () => {
-//   const { login } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -26,32 +18,34 @@ const MentorLogin = () => {
 
   const [loginError, setLoginError] = useState("");
 
-//   const mutation = useMutation({
-//     mutationFn: loginUser,
-//     onSuccess: (data) => {
-//       login(data?.result.user);
-//       console.log("Login Successful:", data);
-//       // Store token or handle successful login
-//       if (data?.status === "success") {
-//         sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
-//         if (data?.result.user.role === "admin") {
-//           navigate("/admin/dashboard"); // Navigate to the admin dashboard
-//         } else {
-//           navigate("/"); // Navigate to the home page for other users
-//         }
-//       }
-//       setLoginError("");
-//       reset();
-//     },
-//     onError: (error) => {
-//       console.error("Login Failed:", error);
-//       alert("Login failed. Please check your credentials.");
-//       setLoginError("Login failed. Please check your credentials.");
-//     },
-//   });
+  const mutation = useMutation({
+    mutationFn: loginMentor,
+    onSuccess: (data) => {
+      login(data?.result.user);
+      console.log("Login Successful:", data);
+      // Store token or handle successful login
+      if (data?.status === "success") {
+        sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
+        if (data?.result.user.role === "admin") {
+          navigate("/admin/dashboard"); // Navigate to the admin dashboard
+        } else if(data?.result.user.role === "mentor") {
+          navigate("/mentor-dashboard"); 
+        } else {
+          navigate("/"); // Navigate to the home page for other users
+        }
+      }
+      setLoginError("");
+      reset();
+    },
+    onError: (error) => {
+      console.error("Login Failed:", error);
+      alert("Login failed. Please check your credentials.");
+      setLoginError("Login failed. Please check your credentials.");
+    },
+  });
 
   const onSubmit = (data) => {
-    // mutation.mutate(data);
+    mutation.mutate(data);
   };
 
   return (
