@@ -28,7 +28,9 @@ export const loginUser = async (loginData) => {
 };
 
 export const verifyEmail = async (token) => {
-  const response = await axios.get(`${API_URL}/users/verify-email/${token}`);
+  const response = await axios.get(`${API_URL}/auth/verify-email/${token}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 
@@ -63,13 +65,12 @@ export const loginMentor = async (MentorLoginCredentials) => {
   return response.data;
 };
 
-
 export const getAllMentorsListInAdmin = async () => {
-  const response  = await axios.get(`${API_URL}/mentor/getAllMentor`,{
+  const response = await axios.get(`${API_URL}/mentor/getAllMentor`, {
     headers: {
       "Content-Type": "application/json",
     },
     withCredentials: true, // Include credentials if needed
-  })
+  });
   return response.data.data.mentors;
-}
+};
