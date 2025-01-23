@@ -1,6 +1,8 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const API_URL = import.meta.env.VITE_BASE_URL; // Your API base URL from the .env file
+const token = Cookies.get("authToken");
 
 export const signupUser = async (userData) => {
   // Define headers
@@ -69,8 +71,62 @@ export const getAllMentorsListInAdmin = async () => {
   const response = await axios.get(`${API_URL}/mentor/getAllMentor`, {
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     withCredentials: true, // Include credentials if needed
   });
-  return response.data.data.mentors;
+  console.log(response.data.data.data);
+  return response.data.data.data;
 };
+
+export const updateAvailability = async (mentorId, unavailability) => {
+  console.log(unavailability); // Log the payload for debugging
+  const response = await axios.patch(
+    `${API_URL}/mentor/unavailability/${mentorId}`,
+    { unavailability }, // Send unavailability directly
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Ensure token is fetched properly
+      },
+      withCredentials: true,
+    }
+  );
+
+  return response.data.data.unavailability;
+};
+
+export const updateMentorDescription = async ({ description, mentorId }) => {
+  console.log(description);
+  const response = await axios.patch(
+    `${API_URL}/mentor/${mentorId}`,
+    { description },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  console.log(response.data)
+  return response.data;
+};
+
+export const updateProfile = async ({ name, bio ,mentorId}) => {
+  
+  const response = await axios.patch(
+    `${API_URL}/mentor/${mentorId}`,
+    { name, bio },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+
+  return response.data.data;
+};
+

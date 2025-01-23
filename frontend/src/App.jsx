@@ -22,6 +22,10 @@ import Mentors from "./pages/userPages/Mentors";
 import ArticlesPage from "./pages/userPages/ArticlesPage";
 import MentorDashboard from "./pages/MentorDashboard/Dashboard";
 import MentorContainer from "./layouts/mentorsLayout/MentorContainer";
+import MentorProfile from "./pages/MentorDashboard/MentorProfile";
+import Mentees from "./pages/MentorDashboard/Mentees";
+import UpdateAvailability from "./pages/MentorDashboard/UpdateAvailability";
+import CreateBlog from "./pages/MentorDashboard/CreateBlog";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -39,6 +43,7 @@ function App() {
           style={{ scaleX }}
         />
 
+        {/* User Routes */}
         <Routes>
           {/* Public Routes */}
           <Route
@@ -113,8 +118,47 @@ function App() {
             />
           </Route>
 
-          <Route path="/mentor" element={<MentorContainer/>}>
-           <Route path="dashboard" element={<MentorDashboard/>}/>
+          {/* Mentor Routes with ProtectedRoute */}
+          <Route path="/mentor" element={<MentorContainer />}>
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute
+                  element={<MentorDashboard />}
+                  roles={["mentor"]}
+                />
+              }
+            />
+            <Route
+              path="mentor-profile"
+              element={
+                <ProtectedRoute
+                  element={<MentorProfile />}
+                  roles={["mentor"]}
+                />
+              }
+            />
+            <Route
+              path="mentees"
+              element={
+                <ProtectedRoute element={<Mentees />} roles={["mentor"]} />
+              }
+            />
+            <Route
+              path="update-availability"
+              element={
+                <ProtectedRoute
+                  element={<UpdateAvailability />}
+                  roles={["mentor"]}
+                />
+              }
+            />
+            <Route
+              path="create-blog"
+              element={
+                <ProtectedRoute element={<CreateBlog />} roles={["mentor"]} />
+              }
+            />
           </Route>
           {/* Email Verification Route */}
           <Route

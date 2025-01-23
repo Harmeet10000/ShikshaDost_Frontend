@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { loginMentor } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const MentorLogin = () => {
   const { login } = useAuth();
@@ -21,11 +22,13 @@ const MentorLogin = () => {
   const mutation = useMutation({
     mutationFn: loginMentor,
     onSuccess: (data) => {
+      
       login(data?.result.user);
       console.log("Login Successful:", data);
       // Store token or handle successful login
       if (data?.status === "success") {
         sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
+        Cookies.set('authToken',data?.token)
         if (data?.result.user.role === "admin") {
           navigate("/admin/dashboard"); // Navigate to the admin dashboard
         } else if(data?.result.user.role === "mentor") {

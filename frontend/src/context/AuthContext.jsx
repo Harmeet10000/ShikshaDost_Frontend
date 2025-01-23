@@ -25,8 +25,17 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem("authToken");
   };
 
+  const updateUser = (updatedData) => {
+    console.log(updatedData)
+    const updatedUser = { ...user, ...updatedData };
+    setUser(updatedUser);
+    sessionStorage.setItem("userData", JSON.stringify(updatedUser));
+  };
+
+
+
   return (
-    <AuthContext.Provider value={{ user, login, logout ,loading}}>
+    <AuthContext.Provider value={{ user, login, logout ,updateUser,loading}}>
       {children}
     </AuthContext.Provider>
   );

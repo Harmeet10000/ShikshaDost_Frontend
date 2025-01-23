@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { HiOutlineLogout } from "react-icons/hi";
+import { useAuth } from "@/context/AuthContext";
 
 const MentorContainer = () => {
+  const {user,logout } = useAuth();
   const [activeFunctionality, setActiveFunctionality] = useState("Dashboard");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -11,25 +13,26 @@ const MentorContainer = () => {
   const functionalities = [
     "Dashboard",
     "Mentor Profile",
-    "Past Mentees",
-    "Upcoming Mentees",
+    "Mentees",
     "Revenue",
     "Update Availability",
+    "Create Blog",
   ];
 
   const handleFunctionalityClick = (func) => {
     setActiveFunctionality(func);
-    navigate(`/${func.toLowerCase().replace(" ", "/")}`);
+    navigate(`/mentor/${func.toLowerCase().replace(" ", "-")}`);
   };
 
-  const handleLogout = () => {
-    // Handle logout logic here
-    console.log("Logged out");
-  };
+  useEffect(() => {
+    if (!user) {
+      navigate("/register");
+    }
+  }, [user, navigate]);
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Header */}
+    <div className="">
+      
       <header className="flex justify-between items-center p-4 shadow bg-white">
         <h2 className="text-2xl font-semibold">Mentor Dashboard</h2>
         <div className="relative">
@@ -43,7 +46,7 @@ const MentorContainer = () => {
             <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded">
               <button
                 className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center"
-                onClick={handleLogout}
+                onClick={logout}
               >
                 <HiOutlineLogout className="mr-2" /> Logout
               </button>
@@ -52,14 +55,14 @@ const MentorContainer = () => {
         </div>
       </header>
 
-      {/* Functionality Header */}
-      <nav className="overflow-x-auto whitespace-nowrap bg-gray-100 p-4 shadow">
-        <div className="flex space-x-4">
+      
+      <nav className="overflow-x-auto whitespace-nowrap bg-[#172e59] p-4 shadow">
+        <div className="flex space-x-4 ">
           {functionalities.map((func) => (
             <button
               key={func}
               onClick={() => handleFunctionalityClick(func)}
-              className={`px-4 py-2 rounded ${
+              className={`px-2 py-1 rounded ${
                 activeFunctionality === func
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-700"
@@ -71,8 +74,7 @@ const MentorContainer = () => {
         </div>
       </nav>
 
-      {/* Main Content */}
-      <main className="flex-1 p-4 overflow-auto">
+      <main className=" p-4 bg-gray-100 ">
         <Outlet />
       </main>
     </div>

@@ -11,6 +11,8 @@ const AuthRedirect = ({ element: Element }) => {
   // If user is admin, redirect to admin dashboard
   if (user && user.role === "admin") {
     return <Navigate to="/admin/dashboard" replace />;
+  } else if (user && user.role === "mentor"){
+    return <Navigate to="/mentor/dashboard" replace />;
   }
 
   // If no user or not admin, show the requested element

@@ -36,7 +36,7 @@ const MentorCard = ({ mentor }) => {
           {/* Profile Section */}
           <div className="flex items-start space-x-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={mentor.imageUrl} alt={mentor.name} />
+              <AvatarImage src={mentor.profile_image} alt={mentor.name} />
               <AvatarFallback>
                 {mentor.name.split(' ').map((n) => n[0]).join('')}
               </AvatarFallback>
@@ -58,13 +58,7 @@ const MentorCard = ({ mentor }) => {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-500">Available</span>
-              <Switch
-                checked={mentor.available}
-                onCheckedChange={handleAvailabilityToggle}
-              />
-            </div>
+            
             <Button variant="destructive" size="icon" onClick={handleDelete}>
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -72,15 +66,15 @@ const MentorCard = ({ mentor }) => {
         </div>
       </CardHeader>
 
-      <CardContent>
-        {/* Revenue Section */}
+      {/* <CardContent>
+        
         <div className="mt-4">
           <div className="flex justify-between items-center mb-4">
             <h4 className="font-semibold">Revenue Overview</h4>
             <span className="text-2xl font-bold text-green-600">{mentor.revenue}</span>
           </div>
 
-          {/* Revenue Chart */}
+          
           <div className="h-64 mt-4">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={revenueData}>
@@ -93,7 +87,7 @@ const MentorCard = ({ mentor }) => {
             </ResponsiveContainer>
           </div>
         </div>
-      </CardContent>
+      </CardContent> */}
     </Card>
   );
 };
@@ -107,7 +101,7 @@ console.log(mentors)
   return (
     <div className="space-y-6">
       {Array.isArray(mentors) && mentors.length > 0 ? (
-        mentors.map((mentor) => <MentorCard key={mentor.id} mentor={mentor} />)
+        mentors.map((mentor) => <MentorCard key={mentor._id} mentor={mentor} />)
       ) : (
         <p>No mentors available.</p>
       )}
