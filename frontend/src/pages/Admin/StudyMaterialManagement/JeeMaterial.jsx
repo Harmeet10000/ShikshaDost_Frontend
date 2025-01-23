@@ -15,17 +15,19 @@ const jeeMaterial = [
   { standard: "12", chapter: "lorem", topic: "lorem2kjdfk", subject: "physics", Download_link: "#" },
 ];
 
-const JeeMaterial = () => {
+const JeeMaterial = ({jeeStudyMaterial,error}) => {
   const [filters, setFilters] = useState({ standard: "all", subject: "all" });
 
-  const standards = Array.from(new Set(jeeMaterial.map((item) => item.standard)));
-  const subjects = Array.from(new Set(jeeMaterial.map((item) => item.subject)));
+  const standards = ["11","12"];
+  const subjects = ["physics","mathematics","chemistry"];
 
-  const filteredMaterials = jeeMaterial.filter(
+  
+  const filteredMaterials = jeeStudyMaterial.filter(
     (material) =>
-      (filters.standard === "all" || material.standard === filters.standard) &&
+      (filters.standard === "all" || material.class === filters.standard) &&
       (filters.subject === "all" || material.subject === filters.subject)
   );
+  
 
   const handleFilterChange = (e) => {
     setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -82,16 +84,27 @@ const JeeMaterial = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredMaterials.length > 0 ? (
+        {error ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center text-red-500">
+                {error}
+              </TableCell>
+            </TableRow>
+          ) : filteredMaterials.length > 0 ? (
             filteredMaterials.map((material, index) => (
-              <TableRow key={index}>
+              <TableRow key={material._id || index}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell>{material.subject}</TableCell>
-                <TableCell>{material.standard}</TableCell>
+                <TableCell>{material.class}</TableCell>
                 <TableCell className="text-right">{material.chapter}</TableCell>
-                <TableCell className="text-right">{material.topic}</TableCell>
+                <TableCell className="text-right">{material.topicName}</TableCell>
                 <TableCell className="text-right">
-                  <a href={material.Download_link} className="text-blue-500 hover:underline">
+                  <a
+                    href={material.S3url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
                     View
                   </a>
                 </TableCell>

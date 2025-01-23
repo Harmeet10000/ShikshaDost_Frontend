@@ -36,7 +36,7 @@ const MentorCard = ({ mentor }) => {
           {/* Profile Section */}
           <div className="flex items-start space-x-4">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={mentor.profile_image} alt={mentor.name} />
+              <AvatarImage src={mentor.profile_imageURL} alt={mentor.name} />
               <AvatarFallback>
                 {mentor.name.split(' ').map((n) => n[0]).join('')}
               </AvatarFallback>

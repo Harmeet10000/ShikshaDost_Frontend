@@ -62,33 +62,44 @@ const jeeMaterial = [
   },
 ];
 
-const NeetMaterial = () => {
-  const [selectedStandard, setSelectedStandard] = useState("All");
-  const [selectedSubject, setSelectedSubject] = useState("All");
+const NeetMaterial = ({ neetStudyMaterial ,error}) => {
+  const [filters, setFilters] = useState({ standard: "all", subject: "all" });
 
-  const filteredMaterial = jeeMaterial.filter((material) => {
-    const standardMatches =
-      selectedStandard === "All" || material.standard === selectedStandard;
-    const subjectMatches =
-      selectedSubject === "All" || material.subject === selectedSubject;
-    return standardMatches && subjectMatches;
-  });
+  const standards = ["11", "12"];
+  const subjects = ["physics", "biology", "chemistry"];
+
+ 
+  const filteredMaterials = neetStudyMaterial.filter(
+    (material) =>
+      (filters.standard === "all" || material.class === filters.standard) &&
+      (filters.subject === "all" || material.subject === filters.subject)
+  );
+  
+
+  const handleFilterChange = (e) => {
+    setFilters((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   return (
     <div>
-      <div className="flex gap-4 mb-4">
+      {/* Filter Section */}
+      <div className="flex items-center gap-4 mb-4">
         <div className="flex items-center gap-x-3">
           <label className="block text-sm font-medium text-gray-700">
             Standard
           </label>
           <select
-            value={selectedStandard}
-            onChange={(e) => setSelectedStandard(e.target.value)}
-            className="border rounded px-2 py-1"
+            name="standard"
+            value={filters.standard}
+            onChange={handleFilterChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="All">All Standards</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+            <option value="all">All</option>
+            {standards.map((standard) => (
+              <option key={standard} value={standard}>
+                {standard}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex items-center gap-x-3">
@@ -96,17 +107,22 @@ const NeetMaterial = () => {
             Subject
           </label>
           <select
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="border rounded px-2 py-1"
+            name="subject"
+            value={filters.subject}
+            onChange={handleFilterChange}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           >
-            <option value="All">All Subjects</option>
-            <option value="physics">Physics</option>
-            <option value="chemistry">Chemistry</option>
-            <option value="biology">biology</option>
+            <option value="all">All</option>
+            {subjects.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
           </select>
         </div>
       </div>
+
+      {/* Table Section */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -119,18 +135,39 @@ const NeetMaterial = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredMaterial.map((material, index) => (
-            <TableRow key={index}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>{material.subject}</TableCell>
-              <TableCell>{material.standard}</TableCell>
-              <TableCell className="text-right">{material.chapter}</TableCell>
-              <TableCell className="text-right">{material.topic}</TableCell>
-              <TableCell className="text-right">
-                <a href={material.Download_link}>view</a>
+        {error ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center text-red-500">
+                {error}
               </TableCell>
             </TableRow>
-          ))}
+          ) : filteredMaterials.length > 0 ? (
+            filteredMaterials.map((material, index) => (
+              <TableRow key={material._id || index}>
+                <TableCell className="font-medium">{index + 1}</TableCell>
+                <TableCell>{material.subject}</TableCell>
+                <TableCell>{material.class}</TableCell>
+                <TableCell className="text-right">{material.chapter}</TableCell>
+                <TableCell className="text-right">{material.topicName}</TableCell>
+                <TableCell className="text-right">
+                  <a
+                    href={material.S3url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    View
+                  </a>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center text-gray-500">
+                No materials found.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

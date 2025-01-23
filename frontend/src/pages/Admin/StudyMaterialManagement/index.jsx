@@ -1,21 +1,38 @@
-import React, { useState, Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, Suspense, lazy } from "react";
+import { motion } from "framer-motion";
+import { useStudyMaterial } from "@/context/StudyMaterialContext";
 
 // Lazy-loaded components for code splitting
-const JeeMaterial = lazy(() => import('@/pages/Admin/StudyMaterialManagement/JeeMaterial'));
-const NeetMaterial = lazy(() => import('@/pages/Admin/StudyMaterialManagement/NeetMaterial')); // Replace with the correct path
-const CuetMaterial = lazy(() => import('@/pages/Admin/StudyMaterialManagement/CuetMaterial')); // Replace with the correct path
-const AddStudyMaterial = lazy(() => import('@/pages/Admin/StudyMaterialManagement/AddStudyMaterial')); // Replace with the correct path
+const JeeMaterial = lazy(() =>
+  import("@/pages/Admin/StudyMaterialManagement/JeeMaterial")
+);
+const NeetMaterial = lazy(() =>
+  import("@/pages/Admin/StudyMaterialManagement/NeetMaterial")
+); // Replace with the correct path
+const CuetMaterial = lazy(() =>
+  import("@/pages/Admin/StudyMaterialManagement/CuetMaterial")
+); // Replace with the correct path
+const AddStudyMaterial = lazy(() =>
+  import("@/pages/Admin/StudyMaterialManagement/AddStudyMaterial")
+); // Replace with the correct path
 
 const StudyMaterialSection = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const { studyMaterials, error } = useStudyMaterial();
+  
+  
 
+  const jeeStudyMaterial = studyMaterials.filter((material)=> material.category === "jee");
+  const neetStudyMaterial = studyMaterials.filter((material)=> material.category === "neet");
+  const cuetStudyMaterial = studyMaterials.filter((material)=> material.category === "cuet");
+
+  // console.log(jeeStudyMaterial,neetStudyMaterial,cuetStudyMaterial)
   // Tab names and corresponding lazy-loaded components
   const tabs = [
-    { label: 'JEE', component: <JeeMaterial /> },
-    { label: 'NEET', component: <NeetMaterial /> },
-    { label: 'CUET', component: <CuetMaterial /> },
-    { label: 'Add Material', component: <AddStudyMaterial /> },
+    { label: "JEE", component: <JeeMaterial jeeStudyMaterial={jeeStudyMaterial} error={error}/> },
+    { label: "NEET", component: <NeetMaterial neetStudyMaterial={neetStudyMaterial} error={error}/> },
+    { label: "CUET", component: <CuetMaterial cuetStudyMaterial={cuetStudyMaterial} error={error}/> },
+    { label: "Add Material", component: <AddStudyMaterial /> },
   ];
 
   return (
@@ -24,15 +41,15 @@ const StudyMaterialSection = () => {
       <motion.div
         className="flex border-b-2"
         style={{
-          position: 'relative',
-          '&::after': {
+          position: "relative",
+          "&::after": {
             content: '""',
-            position: 'absolute',
+            position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            height: '1px',
-            background: '#e5e7eb', // gray-200
+            height: "1px",
+            background: "#e5e7eb", // gray-200
           },
         }}
       >
@@ -41,7 +58,9 @@ const StudyMaterialSection = () => {
             <button
               onClick={() => setActiveTab(index)}
               className={`px-6 py-3 text-sm font-medium transition-colors duration-200 hover:bg-gray-300 ${
-                activeTab === index ? 'text-blue-600' : 'text-gray-600 hover:text-gray-800'
+                activeTab === index
+                  ? "text-blue-600"
+                  : "text-gray-600 hover:text-gray-800"
               }`}
             >
               {tab.label}
@@ -51,7 +70,7 @@ const StudyMaterialSection = () => {
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
                 layoutId="activeTab"
                 transition={{
-                  type: 'spring',
+                  type: "spring",
                   stiffness: 400,
                   damping: 30,
                 }}
@@ -71,7 +90,11 @@ const StudyMaterialSection = () => {
           transition={{ duration: 0.2 }}
         >
           <div className="p-4">
-            <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
+            <Suspense
+              fallback={
+                <div className="text-center text-gray-500">Loading...</div>
+              }
+            >
               {tabs[activeTab].component}
             </Suspense>
           </div>

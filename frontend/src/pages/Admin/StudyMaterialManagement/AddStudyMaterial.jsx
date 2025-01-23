@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useStudyMaterial } from "@/context/StudyMaterialContext";
 
 const AddStudyMaterial = () => {
   const [category, setCategory] = useState("");
@@ -29,6 +30,7 @@ const AddStudyMaterial = () => {
   const BUCKET_NAME = "shikshadost-studymaterial";
   const REGION = "ap-south-1";
 
+  const { fetchStudyMaterials } = useStudyMaterial(); 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -103,6 +105,7 @@ const AddStudyMaterial = () => {
 
       if (response.data.status === "success") {
         toast("Material Added Successfully");
+        await fetchStudyMaterials(); 
       }
       console.log(response);
     } catch (error) {
