@@ -6,14 +6,14 @@ const token = Cookies.get("authToken");
 
 export const signupUser = async (userData) => {
   // Define headers
-  const headers = {
-    "Content-Type": "application/json",
-    // 'Authorization': `Bearer ${yourToken}`,
-  };
+  console.log(userData);
+  
 
-  const response = await axios.post(`${API_URL}/users/signup`, userData, {
-    headers,
-    withCredentials: true,
+  const response = await axios.post(`${API_URL}/auth/signup`, userData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true, // Include credentials if needed
   });
   return response.data;
 };
@@ -109,12 +109,11 @@ export const updateMentorDescription = async ({ description, mentorId }) => {
       withCredentials: true,
     }
   );
-  console.log(response.data)
-  return response.data;
+  
+  return response.data.data;
 };
 
-export const updateProfile = async ({ name, bio ,mentorId}) => {
-  
+export const updateProfile = async ({ name, bio, mentorId }) => {
   const response = await axios.patch(
     `${API_URL}/mentor/${mentorId}`,
     { name, bio },
@@ -130,3 +129,19 @@ export const updateProfile = async ({ name, bio ,mentorId}) => {
   return response.data.data;
 };
 
+
+export const updateMentorSkills = async ({ mentorId, skills }) => {
+  
+  const response = await axios.patch(
+    `${API_URL}/mentor/${mentorId}`,
+    { skills },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  return response.data.data;
+};

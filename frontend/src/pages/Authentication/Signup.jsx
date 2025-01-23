@@ -25,7 +25,7 @@ const Signup = () => {
       // You can add logic here like redirecting the user or showing a success message
     },
     onError: (error) => {
-      console.error("Signup Error:", error);
+      console.error("Signup Error:", error.message);
       // Handle any errors that occur during the signup process
     },
   });

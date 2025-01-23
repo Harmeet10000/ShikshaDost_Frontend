@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = (updatedData) => {
-    console.log(updatedData)
+    console.log(updatedData);
     const updatedUser = { ...user, ...updatedData };
     setUser(updatedUser);
     sessionStorage.setItem("userData", JSON.stringify(updatedUser));

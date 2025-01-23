@@ -24,7 +24,7 @@ const MentorBio = () => {
 
   const mutation = useMutation(updateProfile, {
     onSuccess: (data) => {
-        
+        console.log(data);
       updateUser({name:data.data.name,bio:data.data.bio}); // Update user in context
       setIsDialogOpen(false);
       console.log("Profile updated successfully");
