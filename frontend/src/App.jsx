@@ -26,6 +26,7 @@ import MentorProfile from "./pages/MentorDashboard/MentorProfile";
 import Mentees from "./pages/MentorDashboard/Mentees";
 import UpdateAvailability from "./pages/MentorDashboard/UpdateAvailability";
 import CreateBlog from "./pages/MentorDashboard/CreateBlog";
+import PublishedArticles from "./pages/MentorDashboard/PublishedArticles";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -157,6 +158,12 @@ function App() {
               path="create-blog"
               element={
                 <ProtectedRoute element={<CreateBlog />} roles={["mentor"]} />
+              }
+            />
+            <Route
+              path="published-articles"
+              element={
+                <ProtectedRoute element={<PublishedArticles />} roles={["mentor"]} />
               }
             />
           </Route>

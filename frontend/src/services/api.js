@@ -7,7 +7,6 @@ const token = Cookies.get("authToken");
 export const signupUser = async (userData) => {
   // Define headers
   console.log(userData);
-  
 
   const response = await axios.post(`${API_URL}/auth/signup`, userData, {
     headers: {
@@ -109,7 +108,7 @@ export const updateMentorDescription = async ({ description, mentorId }) => {
       withCredentials: true,
     }
   );
-  
+
   return response.data.data;
 };
 
@@ -129,9 +128,7 @@ export const updateProfile = async ({ name, bio, mentorId }) => {
   return response.data.data;
 };
 
-
 export const updateMentorSkills = async ({ mentorId, skills }) => {
-  
   const response = await axios.patch(
     `${API_URL}/mentor/${mentorId}`,
     { skills },
@@ -144,4 +141,19 @@ export const updateMentorSkills = async ({ mentorId, skills }) => {
     }
   );
   return response.data.data;
+};
+
+export const fetchMentorBlogs = async (mentorId) => {
+  const { data } = await axios.get(
+    `${API_URL}/blogs/getMentorBlogs/${mentorId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  console.log(data);
+  return data?.data.data;
 };

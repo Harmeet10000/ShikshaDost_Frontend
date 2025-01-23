@@ -17,6 +17,7 @@ const MentorContainer = () => {
     "Revenue",
     "Update Availability",
     "Create Blog",
+    "Published Articles"
   ];
 
   const handleFunctionalityClick = (func) => {
