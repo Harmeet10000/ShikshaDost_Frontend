@@ -74,7 +74,7 @@ export const getAllMentorsListInAdmin = async () => {
     },
     withCredentials: true, // Include credentials if needed
   });
-  console.log(response.data.data.data);
+  // console.log(response.data.data.data);
   return response.data.data.data;
 };
 
@@ -154,7 +154,7 @@ export const fetchMentorBlogs = async (mentorId) => {
       withCredentials: true,
     }
   );
-  console.log(data);
+  // console.log(data);
   return data?.data.data;
 };
 
@@ -166,6 +166,18 @@ export const fetchArticleDetails = async (slug) => {
     },
     withCredentials: true,
   });
-  console.log(response);
+  // console.log(response);
   return response?.data.data.data;
+};
+
+export const fetchAllArticles = async () => {
+  const response = await axios.get(`${API_URL}/blogs/getAllBlogs`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  });
+  // console.log(response.data);
+  return response.data.data.data; // Ensure the API returns the correct structure
 };

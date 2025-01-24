@@ -1,6 +1,6 @@
 import React from "react";
 import company_logo from "../../assets/company_logo.png";
-import { MdSpaceDashboard } from "react-icons/md";
+import { MdArticle, MdSpaceDashboard } from "react-icons/md";
 import { IoPeopleSharp } from "react-icons/io5";
 import { ImBooks } from "react-icons/im";
 import { BsFillQuestionSquareFill } from "react-icons/bs";
@@ -31,6 +31,7 @@ const AdminSidebar = ({ isCollapsed }) => {
           { to: "/admin/dashboard", icon: <MdSpaceDashboard />, label: "Dashboard" },
           { to: "/admin/mentors", icon: <IoPeopleSharp />, label: "Mentors" },
           { to: "/admin/study-material", icon: <ImBooks />, label: "Study Material" },
+          { to: "/admin/articles", icon: <MdArticle />, label: "Articles" },
           { to: "/admin/daily-practice", icon: <PiNotebookFill />, label: "Daily Practice" },
           { to: "/admin/mbbs-abroad", icon: <FaUserDoctor />, label: "MBBS Abroad" },
           { to: "/admin/complaints", icon: <BsFillQuestionSquareFill />, label: "Complaints" },

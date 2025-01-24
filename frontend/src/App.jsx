@@ -28,6 +28,7 @@ import UpdateAvailability from "./pages/MentorDashboard/UpdateAvailability";
 import CreateBlog from "./pages/MentorDashboard/CreateBlog";
 import PublishedArticles from "./pages/MentorDashboard/PublishedArticles";
 import SingleArticle from "./pages/MentorDashboard/SingleArticle";
+import ManageArticles from "./pages/Admin/ArticlesManagement";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -101,6 +102,15 @@ function App() {
               }
             />
             <Route
+              path="articles"
+              element={
+                <ProtectedRoute
+                  element={<ManageArticles />}
+                  roles={["admin"]}
+                />
+              }
+            />
+            <Route
               path="daily-practice"
               element={
                 <ProtectedRoute
@@ -164,13 +174,19 @@ function App() {
             <Route
               path="published-articles"
               element={
-                <ProtectedRoute element={<PublishedArticles />} roles={["mentor"]} />
+                <ProtectedRoute
+                  element={<PublishedArticles />}
+                  roles={["mentor"]}
+                />
               }
             />
             <Route
               path="published-articles/:slug"
               element={
-                <ProtectedRoute element={<SingleArticle />} roles={["mentor"]} />
+                <ProtectedRoute
+                  element={<SingleArticle />}
+                  roles={["mentor"]}
+                />
               }
             />
           </Route>

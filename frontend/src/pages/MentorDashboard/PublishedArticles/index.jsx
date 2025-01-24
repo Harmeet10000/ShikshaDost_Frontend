@@ -63,7 +63,8 @@ const PublishedArticles = () => {
               />
               <div className="p-4">
                 <h2 className="text-lg font-semibold mb-2">{blog.title}</h2>
-                <div className="flex justify-between items-center">
+                <p>{blog.desc}</p>
+                <div className="flex justify-between items-center py-3">
                   <p className="text-gray-500 text-sm">
                     {new Date(blog.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",

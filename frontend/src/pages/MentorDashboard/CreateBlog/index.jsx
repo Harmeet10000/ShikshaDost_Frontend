@@ -6,6 +6,7 @@ import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
+import { Textarea } from "@/components/ui/textarea";
 
 const CreateBlog = () => {
   const {
@@ -53,12 +54,29 @@ const CreateBlog = () => {
           },
         },
       },
+      styles: {
+        ".ql-editor": {
+          "line-height": "1.2",
+          padding: "8px",
+        },
+        ".ql-editor p": {
+          "margin-bottom": "4px",
+        },
+      },
     });
 
     editorRef.current.__quill = quill;
 
+    const cleanQuillContent = (htmlContent) => {
+      return htmlContent
+        .replace(/<p><br><\/p>/g, "") // Remove empty paragraphs
+        .replace(/\s+/g, " ") // Reduce multiple spaces
+        .trim();
+    };
+
     quill.on("text-change", () => {
-      setContent(quill.root.innerHTML);
+      const cleanedContent = cleanQuillContent(quill.root.innerHTML);
+      setContent(cleanedContent);
     });
 
     return () => {
@@ -137,7 +155,7 @@ const CreateBlog = () => {
           file.name,
           file.type
         );
-       
+
         const sanitizedPath = replaceSpacesInPath(path);
 
         await axios.put(signedUrl, file, {
@@ -146,8 +164,8 @@ const CreateBlog = () => {
           },
         });
         const coverUrl = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
-        console.log(coverUrl)
-        setCoverImage(coverUrl)
+        console.log(coverUrl);
+        setCoverImage(coverUrl);
         console.log(coverImage);
       } catch (error) {
         console.error("Error uploading cover image:", error);
@@ -159,7 +177,7 @@ const CreateBlog = () => {
     setIsSubmitting(true);
     try {
       console.log(content);
-      const blogData = { ...data, content,cover_image:coverImage };
+      const blogData = { ...data, content, cover_image: coverImage };
       console.log(blogData);
       const response = await axios.post(
         "http://localhost:8000/api/v1/blogs/createBlog",
@@ -210,6 +228,19 @@ const CreateBlog = () => {
             <p className="text-green-500">Cover image uploaded successfully!</p>
           )}
         </div>
+        <div className="form-group">
+          <Textarea
+            placeholder="Enter blog description"
+            {...register("desc", { required: "Description is required" })}
+            className={`textarea ${errors.desc ? "textarea-error" : ""}`} // Optional for styling
+          />
+          {errors.desc && (
+            <p className="error-message text-red-500 mt-1">
+              {errors.desc.message}
+            </p>
+          )}
+        </div>
+
         <div className="form-group h-[300px] mb-10">
           <div ref={editorRef} className="quill-editor h-full" />
         </div>
