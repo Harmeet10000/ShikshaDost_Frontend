@@ -157,3 +157,15 @@ export const fetchMentorBlogs = async (mentorId) => {
   console.log(data);
   return data?.data.data;
 };
+
+export const fetchArticleDetails = async (slug) => {
+  const response = await axios.get(`${API_URL}/blogs/${slug}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    withCredentials: true,
+  });
+  console.log(response);
+  return response?.data.data.data;
+};

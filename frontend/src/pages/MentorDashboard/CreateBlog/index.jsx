@@ -18,7 +18,7 @@ const CreateBlog = () => {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const editorRef = useRef(null);
-
+  const [coverImage, setCoverImage] = useState("");
   const BUCKET_NAME = "shikshadost-studymaterial";
   const REGION = "ap-south-1";
   const token = Cookies.get("authToken");
@@ -129,11 +129,37 @@ const CreateBlog = () => {
     };
   };
 
+  const handleCoverImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      try {
+        const { signedUrl, path, fileUrl } = await getSignedUrl(
+          file.name,
+          file.type
+        );
+       
+        const sanitizedPath = replaceSpacesInPath(path);
+
+        await axios.put(signedUrl, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+        const coverUrl = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
+        console.log(coverUrl)
+        setCoverImage(coverUrl)
+        console.log(coverImage);
+      } catch (error) {
+        console.error("Error uploading cover image:", error);
+      }
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
       console.log(content);
-      const blogData = { ...data, content };
+      const blogData = { ...data, content,cover_image:coverImage };
       console.log(blogData);
       const response = await axios.post(
         "http://localhost:8000/api/v1/blogs/createBlog",
@@ -172,6 +198,16 @@ const CreateBlog = () => {
           />
           {errors.title && (
             <p className="error-message">{errors.title.message}</p>
+          )}
+        </div>
+        <div className="form-group">
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={handleCoverImageUpload}
+          />
+          {coverImage && (
+            <p className="text-green-500">Cover image uploaded successfully!</p>
           )}
         </div>
         <div className="form-group h-[300px] mb-10">
