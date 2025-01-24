@@ -29,6 +29,7 @@ import CreateBlog from "./pages/MentorDashboard/CreateBlog";
 import PublishedArticles from "./pages/MentorDashboard/PublishedArticles";
 import SingleArticle from "./pages/MentorDashboard/SingleArticle";
 import ManageArticles from "./pages/Admin/ArticlesManagement";
+import SingleArticleOnUser from "./pages/userPages/SingleArticleOnUser";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -65,6 +66,10 @@ function App() {
             <Route
               path="articles"
               element={<AuthRedirect element={<ArticlesPage />} />}
+            />
+            <Route
+              path="articles/:slug"
+              element={<AuthRedirect element={<SingleArticleOnUser />} />}
             />
             <Route
               path="register"

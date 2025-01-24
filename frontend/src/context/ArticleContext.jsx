@@ -18,7 +18,7 @@ const fetchArticles = async () => {
       withCredentials: true,
     }
   );
-//   console.log(response);
+  console.log(response.data.data.data);
   return response.data.data.data; // Ensure the API response matches your structure
 };
 

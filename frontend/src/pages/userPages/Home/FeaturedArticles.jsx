@@ -11,7 +11,7 @@ const FeaturedArticles = () => {
     <div className="py-12">
       <div className="max-w-7xl mx-auto px-4 flex flex-col items-center gap-y-5">
         <div className="flex flex-col justify-center items-center max-w-5xl  gap-y-5">
-          <h1 className="text-center text-xl md:text-5xl font-bold">
+          <h1 className="text-center text-xl md:text-3xl font-bold">
             Empower Your Learning Journey
           </h1>
           <p className="text-center text-gray-600 text-lg">

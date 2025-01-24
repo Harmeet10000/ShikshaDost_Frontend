@@ -13,7 +13,7 @@ const FeaturedDailyPractice = () => {
         {/* Header with View More Button */}
         <div className="flex flex-col justify-center items-center max-w-5xl  gap-y-5">
           <motion.h1
-            className="text-center text-xl md:text-5xl font-bold"
+            className="text-center text-xl md:text-3xl font-bold"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
