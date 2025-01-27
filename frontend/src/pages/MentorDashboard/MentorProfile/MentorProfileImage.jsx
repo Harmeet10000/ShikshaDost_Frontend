@@ -12,6 +12,7 @@ import {
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import compressImage from "@/utils/compressor";
 const MentorProfileImage = () => {
   const { user ,updateUser} = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -50,21 +51,22 @@ const MentorProfileImage = () => {
     }
   };
 
-  
+
   const handleUpload = async () => {
     if (!selectedFile) return;
     // console.log(selectedFile.name, selectedFile.type);
     try {
       setIsUploading(true);
+      const compressedImage = await compressImage(selectedFile);
       const { signedUrl, path } = await getSignedUrl(
-        selectedFile.name,
-        selectedFile.type
+        compressedImage.name,
+        compressedImage.type
       );
       const sanitizedPath = replaceSpacesInPath(path);
       // console.log(signedUrl);
-      await axios.put(signedUrl, selectedFile, {
+      await axios.put(signedUrl, compressedImage, {
         headers: {
-          "Content-Type": selectedFile.type,
+          "Content-Type": compressedImage.type,
         },
       });
       const s3Url = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;

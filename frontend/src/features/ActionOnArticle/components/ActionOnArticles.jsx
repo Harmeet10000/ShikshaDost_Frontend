@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import { BiComment, BiLike, BiShare } from "react-icons/bi";
+import { BiComment, BiLike, BiShare, BiSave } from "react-icons/bi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { BsEmojiDizzy, BsEmojiLaughingFill } from "react-icons/bs";
-import { MdEmojiPeople } from "react-icons/md";
+import { BsEmojiLaughingFill } from "react-icons/bs";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { ToastTitle } from "@radix-ui/react-toast";
 import { toast } from "sonner";
-import { useArticles } from "@/context/ArticleContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
 import { handleLikeOnPost, handleShareOnPost } from "@/services/api";
 import { useNavigate } from "react-router-dom";
 
 const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
@@ -106,7 +103,7 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
   });
 
   // handling like on articles
-  const handleLike = async () => {
+  const handleLike = () => {
     if (!user) {
       navigate("/register");
       return;
@@ -128,6 +125,27 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
     } catch (error) {
       console.error("Failed to copy share link: ", error);
       toast.error("Failed to copy share link.");
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/v1/blogs/save-blog/${articleDetails?._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.status === 200) {
+        updateUser({ savedPosts: response.data.savedPosts });
+        toast.success(response.data.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -160,6 +178,15 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
             <BiShare />
           </span>{" "}
           Share
+        </div>
+        <div
+          className="flex items-center gap-x-2 hover:bg-gray-300 p-2 hover:cursor-pointer hover:rounded-xl"
+          onClick={handleSave}
+        >
+          <span>
+            <BiSave />
+          </span>{" "}
+          Save
         </div>
       </div>
       {displayCommentInput && (

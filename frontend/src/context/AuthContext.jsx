@@ -31,6 +31,10 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
     sessionStorage.setItem("userData", JSON.stringify(updatedUser));
   };
+  
+  const updateSavedPost = () => {
+
+  }
 
 
 

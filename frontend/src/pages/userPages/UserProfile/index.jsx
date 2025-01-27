@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,13 +16,24 @@ import {
 import { getSignedUrl } from "@/utils/GetSignedUrl";
 import axios from "axios";
 import { toast } from "sonner";
+import compressImage from "@/utils/compressor";
+import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const StudentProfile = () => {
-  const { user,updateUser } = useAuth();
+  const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const BUCKET_NAME = "shikshadost-studymaterial";
   const REGION = "ap-south-1";
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/register");
+      return;
+    }
+  }, [user, navigate]);
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -39,16 +50,20 @@ const StudentProfile = () => {
     // console.log(selectedFile.name, selectedFile.type);
     try {
       setIsUploading(true);
+      const compressedImage = await compressImage(selectedFile);
+      console.log("Original File Size:", selectedFile.size / 1024, "KB");
+      console.log("Compressed File Size:", compressedImage.size / 1024, "KB");
+
       const { signedUrl, path } = await getSignedUrl(
-        selectedFile.name,
-        selectedFile.type,
+        compressedImage.name,
+        compressedImage.type,
         "users"
       );
       const sanitizedPath = replaceSpacesInPath(path);
       // console.log(signedUrl);
-      await axios.put(signedUrl, selectedFile, {
+      await axios.put(signedUrl, compressedImage, {
         headers: {
-          "Content-Type": selectedFile.type,
+          "Content-Type": compressedImage.type,
         },
       });
       const s3Url = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
@@ -66,7 +81,7 @@ const StudentProfile = () => {
   const mutation = useMutation(updateStudentProfileImage, {
     onSuccess: (data) => {
       // console.log('data',data);
-      updateUser({profile_imageURL:data.data.profile_imageURL});
+      updateUser({ profile_imageURL: data.data.profile_imageURL });
       toast("image updated successfully");
     },
     onError: (error) => {
@@ -76,7 +91,7 @@ const StudentProfile = () => {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
+    <div className="max-w-4xl mx-auto p-1 sm:p-4 space-y-6">
       {/* Profile Section */}
       <Card>
         <CardHeader>
@@ -158,15 +173,36 @@ const StudentProfile = () => {
         <CardContent>
           <div className="space-y-4">
             {/* Sample saved articles - you can map through actual data here */}
-            {[1, 2, 3].map((article) => (
+            {user?.savedPosts.map((article) => (
               <div
-                key={article}
-                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                key={article.blogId.id}
+                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors space-y-3"
               >
-                <h3 className="font-medium">Article Title {article}</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Brief description of the article goes here...
-                </p>
+                <div>
+                  <img
+                    className="rounded-lg"
+                    src={article.blogId.cover_image}
+                    alt={article.blogId.title}
+                  />
+                </div>
+                <div className="">
+                  <div className="mb-2">
+                    <h1 className="text-xl font-bold">
+                      {article.blogId.title}
+                    </h1>
+                    <p>{article.blogId.desc}</p>
+                  </div>
+
+                  <div className="flex items-center gap-x-2">
+                    <Avatar>
+                      <AvatarImage
+                        src={article.blogId.author.profile_imageURL}
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <span>{article.blogId.author.name}</span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

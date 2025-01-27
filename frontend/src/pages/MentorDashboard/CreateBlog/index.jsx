@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { Textarea } from "@/components/ui/textarea";
+import compressImage from "@/utils/compressor";
 
 const CreateBlog = () => {
   const {
@@ -114,16 +115,17 @@ const CreateBlog = () => {
       const file = input.files[0];
       if (file) {
         try {
-          const { signedUrl, path, fileUrl } = await getSignedUrl(
-            file.name,
-            file.type
+          const compressedImage = await compressImage(selectedFile);
+          const { signedUrl, path } = await getSignedUrl(
+            compressedImage.name,
+            compressedImage.type
           );
 
           const sanitizedPath = replaceSpacesInPath(path);
 
-          await axios.put(signedUrl, file, {
+          await axios.put(signedUrl, compressedImage, {
             headers: {
-              "Content-Type": file.type,
+              "Content-Type": compressedImage.type,
             },
           });
           const S3url = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
