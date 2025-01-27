@@ -3,12 +3,13 @@ import { useAuth } from "@/context/AuthContext";
 
 const UnavailabilityDates = () => {
   const { user } = useAuth();
-
+  console.log(user);
   const [unavailability, setUnavailability] = useState([]);
 
   // Load unavailability from user when the component mounts
   useEffect(() => {
     if (user?.unavailability) {
+      console.log("date", unavailability);
       setUnavailability(user.unavailability);
     }
   }, [user]);

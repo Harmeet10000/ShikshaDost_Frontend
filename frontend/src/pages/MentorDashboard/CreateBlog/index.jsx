@@ -2,6 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
+import TableModule from "quill-table-ui";
+
+import "quill-table-ui/dist/index.css"; // For table styling
+
 import axios from "axios";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -25,43 +29,36 @@ const CreateBlog = () => {
   const token = Cookies.get("authToken");
 
   useEffect(() => {
+    Quill.register({
+      "modules/table": TableModule,
+    });
+
     const quill = new Quill(editorRef.current, {
       theme: "snow",
       modules: {
         toolbar: {
           container: [
-            ["bold", "italic", "underline", "strike"], // toggled buttons
+            ["bold", "italic", "underline", "strike"],
             ["blockquote", "code-block"],
             ["link", "image", "video", "formula"],
-
-            [{ header: 1 }, { header: 2 }], // custom button values
+            [{ header: 1 }, { header: 2 }],
             [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-            [{ script: "sub" }, { script: "super" }], // superscript/subscript
-            [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-            [{ direction: "rtl" }], // text direction
-
-            [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+            [{ script: "sub" }, { script: "super" }],
+            [{ indent: "-1" }, { indent: "+1" }],
+            [{ direction: "rtl" }],
+            [{ size: ["small", false, "large", "huge"] }],
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            [{ color: [] }, { background: [] }],
             [{ font: [] }],
             [{ align: [] }],
-
-            ["clean"], // remove formatting button
+            ["clean"],
+            ["table", "table-row-above", "table-row-below", "table-column-left", "table-column-right", "table-delete-row", "table-delete-column", "table-delete"],
           ],
           handlers: {
             image: handleImageUpload,
           },
         },
-      },
-      styles: {
-        ".ql-editor": {
-          "line-height": "1.2",
-          padding: "8px",
-        },
-        ".ql-editor p": {
-          "margin-bottom": "4px",
-        },
+        table: true, // Enable table module
       },
     });
 
@@ -69,8 +66,8 @@ const CreateBlog = () => {
 
     const cleanQuillContent = (htmlContent) => {
       return htmlContent
-        .replace(/<p><br><\/p>/g, "") // Remove empty paragraphs
-        .replace(/\s+/g, " ") // Reduce multiple spaces
+        .replace(/<p><br><\/p>/g, "")
+        .replace(/\s+/g, " ")
         .trim();
     };
 
@@ -130,7 +127,6 @@ const CreateBlog = () => {
             },
           });
           const S3url = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
-          // console.log("s3", S3url, "file", fileUrl);
           const imageUrl = S3url;
           const quill = editorRef.current.__quill;
 
@@ -164,9 +160,7 @@ const CreateBlog = () => {
           },
         });
         const coverUrl = `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${sanitizedPath}`;
-        console.log(coverUrl);
         setCoverImage(coverUrl);
-        console.log(coverImage);
       } catch (error) {
         console.error("Error uploading cover image:", error);
       }
@@ -176,9 +170,7 @@ const CreateBlog = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      console.log(content);
       const blogData = { ...data, content, cover_image: coverImage };
-      console.log(blogData);
       const response = await axios.post(
         "http://localhost:8000/api/v1/blogs/createBlog",
         blogData,
@@ -206,7 +198,7 @@ const CreateBlog = () => {
       </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="create-blog-form  flex flex-col gap-y-10 "
+        className="create-blog-form flex flex-col gap-y-10 "
       >
         <div className="form-group">
           <Input
@@ -232,7 +224,7 @@ const CreateBlog = () => {
           <Textarea
             placeholder="Enter blog description"
             {...register("desc", { required: "Description is required" })}
-            className={`textarea ${errors.desc ? "textarea-error" : ""}`} // Optional for styling
+            className={`textarea ${errors.desc ? "textarea-error" : ""}`}
           />
           {errors.desc && (
             <p className="error-message text-red-500 mt-1">

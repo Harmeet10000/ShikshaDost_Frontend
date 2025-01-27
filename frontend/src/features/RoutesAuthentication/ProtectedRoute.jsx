@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 
 const ProtectedRoute = ({ element: Element, roles }) => {
   const { user, loading } = useAuth();
-
+  console.log('protect',user);
   if (loading) {
     return <div>Loading...</div>;
   }

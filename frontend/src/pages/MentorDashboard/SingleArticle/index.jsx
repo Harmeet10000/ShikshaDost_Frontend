@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+
 import { fetchArticleDetails } from "@/services/api";
 import DOMPurify from "dompurify";
 import { BiLike, BiComment, BiShare } from "react-icons/bi";

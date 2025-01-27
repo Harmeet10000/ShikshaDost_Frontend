@@ -5,9 +5,10 @@ import { useAuth } from "@/context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { updateAvailability } from "@/services/api";
 import UnavailabilityDates from "./UnavailabilityDates";
+import { toast } from "sonner";
 
 const UpdateAvailability = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [selectedDate, setSelectedDate] = useState(null);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
@@ -16,8 +17,10 @@ const UpdateAvailability = () => {
   const mentorId = user?._id;
   // console.log(user?.id);
   const mutation = useMutation((data) => updateAvailability(mentorId, data), {
-    onSuccess: () => {
-      alert("Availability updated successfully!");
+    onSuccess: (data) => {
+      console.log(data);
+      toast("Availability updated successfully!");
+      updateUser({ unavailability: data });
       // Clear the form after successful update
       setSelectedDate(null);
       setStartTime("");
@@ -198,7 +201,7 @@ const UpdateAvailability = () => {
         </div>
       </div>
       <div className="w-full md:w-3/6">
-        <UnavailabilityDates/>
+        <UnavailabilityDates />
       </div>
     </div>
   );

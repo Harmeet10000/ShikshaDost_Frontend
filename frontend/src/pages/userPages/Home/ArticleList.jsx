@@ -37,7 +37,7 @@ const ArticleList = () => {
           variants={cardVariants}
           whileHover={hoverEffect}
         >
-          {/* Article Image */}
+         
           <Link to={`/articles/${article.slug}`} >
             <img
               src={article.cover_image}
@@ -47,16 +47,14 @@ const ArticleList = () => {
           </Link>
 
           <div className=" flex flex-col justify-between">
-            {/* Title and Excerpt */}
+           
             <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
             <p className="text-gray-600 mb-4">
               {article.desc}{" "}
-              {/* <a href="#" className="text-teal-500 hover:underline">
-                Read More
-              </a> */}
+             
             </p>
 
-            {/* Author Info */}
+          
             <div className="flex items-center mt-4">
               <img
                 src={article.author.profile_imageURL}

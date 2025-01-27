@@ -91,7 +91,7 @@ export const updateAvailability = async (mentorId, unavailability) => {
       withCredentials: true,
     }
   );
-
+console.log(response.data.data.unavailability);
   return response.data.data.unavailability;
 };
 
@@ -181,3 +181,19 @@ export const fetchAllArticles = async () => {
   // console.log(response.data);
   return response.data.data.data; // Ensure the API returns the correct structure
 };
+
+
+export const replyOnComment = async ({ commentId, replyContent }) => {
+  const response = await axios.post(
+    `${API_URL}/comments/reply/${commentId}`,
+    { desc: replyContent },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adjust according to your token logic
+      },
+    }
+  );
+  console.log(response.data)
+  return response.data;
+}
