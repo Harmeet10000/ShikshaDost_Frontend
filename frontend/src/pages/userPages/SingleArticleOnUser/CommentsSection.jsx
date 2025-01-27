@@ -15,6 +15,7 @@ const Comment = ({ comment, onReply, user, isLoading }) => {
       toast.error("Reply cannot be empty.");
       return;
     }
+
     onReply(comment._id, replyContent);
     setReplyContent("");
     setIsReplying(false);
@@ -25,7 +26,9 @@ const Comment = ({ comment, onReply, user, isLoading }) => {
       <div className="flex items-center gap-x-4">
         <Avatar>
           <AvatarImage
-            src={comment.user?.profile_imageURL || "https://via.placeholder.com/40"}
+            src={
+              comment.user?.profile_imageURL || "https://via.placeholder.com/40"
+            }
           />
           <AvatarFallback>
             {comment.user?.name?.[0]?.toUpperCase() || "U"}
@@ -94,7 +97,10 @@ const Comment = ({ comment, onReply, user, isLoading }) => {
               <div className="flex items-center gap-x-4">
                 <Avatar>
                   <AvatarImage
-                    src={reply.user?.profile_imageURL || "https://via.placeholder.com/40"}
+                    src={
+                      reply.user?.profile_imageURL ||
+                      "https://via.placeholder.com/40"
+                    }
                   />
                   <AvatarFallback>
                     {reply.user?.name?.[0]?.toUpperCase() || "U"}
@@ -116,7 +122,7 @@ const Comment = ({ comment, onReply, user, isLoading }) => {
 const CommentsSection = ({ articleDetails }) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-
+  
   const { mutate, isLoading } = useMutation(replyOnComment, {
     onSuccess: () => {
       toast.success("Reply added successfully!");
@@ -128,6 +134,7 @@ const CommentsSection = ({ articleDetails }) => {
   });
 
   const handleReplyOnComment = (commentId, replyContent) => {
+    console.log(commentId, replyContent);
     mutate({ commentId, replyContent });
   };
 

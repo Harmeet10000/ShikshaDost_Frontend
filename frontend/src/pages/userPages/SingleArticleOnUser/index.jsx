@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
 
 import SkeletonLoader from "@/components/loader/SkeletonLoader";
+import { BiComment, BiLike, BiShare } from "react-icons/bi";
 
 const ActionOnArticles = React.lazy(() =>
   import("@/features/ActionOnArticle/components/ActionOnArticles")
@@ -57,14 +58,35 @@ const SingleArticleOnUser = () => {
         <p className="text-xl mb-2">{articleDetails?.desc}</p>
         <hr />
         <div className="flex justify-between items-center py-2">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-sm ">
             Published on:{" "}
-            {new Date(articleDetails?.createdAt).toLocaleDateString("en-US", {
+            {new Date(data.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
             })}
           </p>
+
+          <div className="flex gap-x-3 items-center">
+            <div className="flex gap-x-2 items-center">
+              <span>
+                <BiLike />
+              </span>{" "}
+              {articleDetails?.likes}
+            </div>
+            <div className="flex gap-x-2 items-center">
+              <span>
+                <BiComment />
+              </span>{" "}
+              {articleDetails?.comments.length}
+            </div>
+            <div className="flex gap-x-2 items-center">
+              <span>
+                <BiShare />
+              </span>{" "}
+              {articleDetails?.shares}
+            </div>
+          </div>
         </div>
         <hr />
         <img
@@ -72,6 +94,9 @@ const SingleArticleOnUser = () => {
           alt={articleDetails?.title}
           className="w-full h-64 object-cover rounded-lg mb-6"
         />
+      </div>
+      <div className="article-content px-6 max-w-2xl w-full">
+        <RichTextRenderer content={articleDetails?.content} />
       </div>
 
       <div className="actions-on-article px-6 max-w-2xl w-full">

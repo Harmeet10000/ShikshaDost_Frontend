@@ -9,19 +9,27 @@ import Cookies from "js-cookie";
 import { ToastTitle } from "@radix-ui/react-toast";
 import { toast } from "sonner";
 import { useArticles } from "@/context/ArticleContext";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/context/AuthContext";
+import { handleLikeOnPost, handleShareOnPost } from "@/services/api";
+import { useNavigate } from "react-router-dom";
 
 const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [displayCommentInput, setDisplayCommentInput] = useState(false);
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const token = Cookies.get("authToken");
 
+  //handling comment on articles
   const handlePostComment = async () => {
     try {
+      if (!user) {
+        navigate("/register");
+        return;
+      }
       setLoading(true);
       const response = await axios.post(
         `http://localhost:8000/api/v1/comments/${articleDetails?._id}`,
@@ -67,10 +75,69 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
     }
   };
 
+  //mutation for like functionality
+  const { mutate } = useMutation(handleLikeOnPost, {
+    onSuccess: () => {
+      setArticleDetails((prev) => ({
+        ...prev,
+        likes: prev.likes + 1,
+      }));
+
+      toast.success("Blog liked");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Failed to like post.");
+    },
+  });
+
+  //mutation for share functaionality
+  const mutation = useMutation(handleShareOnPost, {
+    onSuccess: () => {
+      setArticleDetails((prev) => ({
+        ...prev,
+        shares: prev.shares + 1,
+      }));
+
+      toast.success("Blog shared");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Failed to share post.");
+    },
+  });
+
+  // handling like on articles
+  const handleLike = async () => {
+    if (!user) {
+      navigate("/register");
+      return;
+    }
+    mutate(articleDetails?._id);
+  };
+
+  //handling share on articles
+  const handleShare = async () => {
+    try {
+      if (!user) {
+        navigate("/register");
+        return;
+      }
+      const articleLink = `${window.location.origin}/articles/${articleDetails?.slug}`;
+      await navigator.clipboard.writeText(articleLink);
+      mutation.mutate(articleDetails?._id);
+      alert("Article share link copied!");
+    } catch (error) {
+      console.error("Failed to copy share link: ", error);
+      toast.error("Failed to copy share link.");
+    }
+  };
+
   return (
     <div className="space-y-5 mb-5">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-x-2 hover:bg-gray-300 p-2 hover:cursor-pointer hover:rounded-xl">
+        <div
+          className="flex items-center gap-x-2 hover:bg-gray-300 p-2 hover:cursor-pointer hover:rounded-xl"
+          onClick={handleLike}
+        >
           <span>
             <BiLike />
           </span>{" "}
@@ -85,7 +152,10 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
           </span>{" "}
           Comment
         </div>
-        <div className="flex items-center gap-x-2 hover:bg-gray-300 p-2 hover:cursor-pointer hover:rounded-xl">
+        <div
+          className="flex items-center gap-x-2 hover:bg-gray-300 p-2 hover:cursor-pointer hover:rounded-xl"
+          onClick={handleShare}
+        >
           <span>
             <BiShare />
           </span>{" "}
@@ -96,7 +166,9 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
         <div className="comment-input-section flex gap-x-4">
           <Avatar>
             <AvatarImage src={user?.profile_imageURL} />
-            <AvatarFallback>{user?.name?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+            <AvatarFallback>
+              {user?.name?.[0]?.toUpperCase() || "U"}
+            </AvatarFallback>
           </Avatar>
           <div className="flex-1 border border-black rounded-xl">
             <Input

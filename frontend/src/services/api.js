@@ -91,7 +91,7 @@ export const updateAvailability = async (mentorId, unavailability) => {
       withCredentials: true,
     }
   );
-console.log(response.data.data.unavailability);
+  console.log(response.data.data.unavailability);
   return response.data.data.unavailability;
 };
 
@@ -182,7 +182,6 @@ export const fetchAllArticles = async () => {
   return response.data.data.data; // Ensure the API returns the correct structure
 };
 
-
 export const replyOnComment = async ({ commentId, replyContent }) => {
   const response = await axios.post(
     `${API_URL}/comments/reply/${commentId}`,
@@ -194,6 +193,36 @@ export const replyOnComment = async ({ commentId, replyContent }) => {
       },
     }
   );
-  console.log(response.data)
+  console.log(response.data);
   return response.data;
-}
+};
+
+export const handleLikeOnPost = async (blogId) => {
+  const response = await axios.post(
+    `${API_URL}/blogs/like/${blogId}`,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adjust according to your token logic
+      },
+    }
+  );
+  console.log(response);
+  return response.data.data.blog;
+};
+
+export const handleShareOnPost = async (blogId) => {
+  const response = await axios.post(
+    `${API_URL}/blogs/share/${blogId}`,
+    {},
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adjust according to your token logic
+      },
+    }
+  );
+  console.log(response);
+  return response.data.data.blog;
+};
