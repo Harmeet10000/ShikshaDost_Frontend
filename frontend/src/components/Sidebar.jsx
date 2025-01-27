@@ -72,7 +72,7 @@ const Sidebar = ({ toggleSideBar }) => {
         {user && (
           <>
             <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
-              <a href="#">Your Profile</a>
+              <a href="/my-profile">Your Profile</a>
             </div>
             <div className="p-2 cursor-pointer  hover:translate-x-2 hover:text-green-500 transition-all duration-300">
               <a href="#">Your Mentorship</a>

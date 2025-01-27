@@ -226,3 +226,18 @@ export const handleShareOnPost = async (blogId) => {
   console.log(response);
   return response.data.data.blog;
 };
+
+export const updateStudentProfileImage = async ({userId,profile_image}) => {
+  const response = await axios.patch(
+    `${API_URL}/users/updateProfileImage/${userId}`,
+    { profile_imageURL:profile_image },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adjust according to your token logic
+      },
+    }
+  );
+
+  return response.data.data;
+};

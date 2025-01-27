@@ -49,6 +49,8 @@ const MentorProfileImage = () => {
       throw error;
     }
   };
+
+  
   const handleUpload = async () => {
     if (!selectedFile) return;
     // console.log(selectedFile.name, selectedFile.type);

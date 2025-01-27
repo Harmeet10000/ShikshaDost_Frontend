@@ -30,6 +30,7 @@ import PublishedArticles from "./pages/MentorDashboard/PublishedArticles";
 import SingleArticle from "./pages/MentorDashboard/SingleArticle";
 import ManageArticles from "./pages/Admin/ArticlesManagement";
 import SingleArticleOnUser from "./pages/userPages/SingleArticleOnUser";
+import StudentProfile from "./pages/userPages/UserProfile";
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -49,7 +50,7 @@ function App() {
 
         {/* User Routes */}
         <Routes>
-          {/* Public Routes */}
+        
           <Route
             path="/"
             element={<AuthRedirect element={<UserContainer />} />}
@@ -74,6 +75,10 @@ function App() {
             <Route
               path="register"
               element={<AuthRedirect element={<RegisterPage />} />}
+            />
+            <Route
+              path="my-profile"
+              element={<AuthRedirect element={<StudentProfile />} />}
             />
           </Route>
 

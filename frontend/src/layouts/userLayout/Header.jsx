@@ -149,7 +149,7 @@ const Header = () => {
 
                 <div className="flex flex-col ">
                   <a
-                    href="#"
+                    href="my-profile"
                     className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
                   >
                     Your Profile
