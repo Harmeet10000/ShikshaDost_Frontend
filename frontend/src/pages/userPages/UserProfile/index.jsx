@@ -17,8 +17,15 @@ import { getSignedUrl } from "@/utils/GetSignedUrl";
 import axios from "axios";
 import { toast } from "sonner";
 import compressImage from "@/utils/compressor";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 const StudentProfile = () => {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
@@ -27,7 +34,7 @@ const StudentProfile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const BUCKET_NAME = "shikshadost-studymaterial";
   const REGION = "ap-south-1";
-
+  console.log(user);
   useEffect(() => {
     if (!user) {
       navigate("/register");
@@ -166,48 +173,51 @@ const StudentProfile = () => {
       </Card>
 
       {/* Saved Articles Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Saved Articles</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {/* Sample saved articles - you can map through actual data here */}
-            {user?.savedPosts.map((article) => (
-              <div
-                key={article.blogId.id}
-                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors space-y-3"
-              >
-                <div>
-                  <img
-                    className="rounded-lg"
-                    src={article.blogId.cover_image}
-                    alt={article.blogId.title}
-                  />
-                </div>
-                <div className="">
-                  <div className="mb-2">
-                    <h1 className="text-xl font-bold">
-                      {article.blogId.title}
-                    </h1>
-                    <p>{article.blogId.desc}</p>
-                  </div>
-
-                  <div className="flex items-center gap-x-2">
-                    <Avatar>
-                      <AvatarImage
-                        src={article.blogId.author.profile_imageURL}
+      <section className="border rounded-lg shadow-lg p-4">
+        <h1 className="text-xl font-bold">Saved Articles</h1>
+        <div className="flex justify-center ">
+          <Carousel className="p-4 w-full max-w-2xl">
+            <CarouselContent>
+              {user?.savedBlogs.map((article, index) => (
+                <CarouselItem
+                  key={article.blogId.id}
+                  className="  rounded-lg hover:bg-gray-50 transition-colors space-y-3"
+                >
+                  <div className="">
+                    <Link to={`/articles/${article.blogId.slug}`}>
+                      <img
+                        className="rounded-lg"
+                        src={article.blogId.cover_image}
+                        alt={article.blogId.title}
                       />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                    <span>{article.blogId.author.name}</span>
+                    </Link>
                   </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+                  <div className="">
+                    <div className="mb-2">
+                      <h1 className="text-xl font-bold">
+                        {article.blogId.title}
+                      </h1>
+                      <p>{article.blogId.desc}</p>
+                    </div>
+
+                    <div className="flex items-center gap-x-2">
+                      <Avatar>
+                        <AvatarImage
+                          src={article.blogId.author.profile_imageURL}
+                        />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <span>{article.blogId.author.name}</span>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+      </section>
     </div>
   );
 };

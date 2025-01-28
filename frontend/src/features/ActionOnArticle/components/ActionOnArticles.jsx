@@ -141,7 +141,7 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
       );
       console.log(response);
       if (response.status === 200) {
-        updateUser({ savedPosts: response.data.savedPosts });
+        updateUser({ savedBlogs: response.data.savedBlogs });
         toast.success(response.data.message);
       }
     } catch (error) {

@@ -19,16 +19,17 @@ const FeaturedArticles = () => {
             success stories to help you build and grow your vision.
           </p>
         </div>
-
-        <React.Suspense
-          fallback={
-            <div>
-              <CircleLoader />
-            </div>
-          }
-        >
-          <ArticleList />
-        </React.Suspense>
+        <div className="w-full px-4">
+          <React.Suspense
+            fallback={
+              <div>
+                <CircleLoader />
+              </div>
+            }
+          >
+            <ArticleList />
+          </React.Suspense>
+        </div>
 
         <div className="flex justify-center items-center">
           <Link to={"/articles"}>

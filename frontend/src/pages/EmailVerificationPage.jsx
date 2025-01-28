@@ -6,7 +6,7 @@ import { toast } from "sonner"; // To show toast notifications
 
 const EmailVerificationPage = () => {
   const { token } = useParams(); // Extract token from the URL
-
+  console.log(token);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["verifyEmail", token],
     queryFn: () => verifyEmail(token),
@@ -19,6 +19,10 @@ const EmailVerificationPage = () => {
     },
     enabled: !!token, // Ensure the query only runs if a token is present
   });
+
+  if (!token) {
+    return <div>Invalid verification link.</div>;
+  }
 
   if (isLoading) {
     return <div>Verifying your email...</div>;

@@ -28,10 +28,15 @@ export const loginUser = async (loginData) => {
   return response.data;
 };
 
-export const verifyEmail = async (token) => {
-  const response = await axios.get(`${API_URL}/auth/verify-email/${token}`, {
-    withCredentials: true,
-  });
+export const verifyEmail = async (verifyToken) => {
+  console.log(verifyToken);
+  const response = await axios.get(
+    `${API_URL}/auth/verify-email/${verifyToken}`,
+    {
+      withCredentials: true,
+    }
+  );
+  console.log(response);
   return response.data;
 };
 
@@ -74,7 +79,7 @@ export const getAllMentorsListInAdmin = async () => {
     },
     withCredentials: true, // Include credentials if needed
   });
-  // console.log(response.data.data.data);
+  console.log(response.data.data.data);
   return response.data.data.data;
 };
 
@@ -227,10 +232,10 @@ export const handleShareOnPost = async (blogId) => {
   return response.data.data.blog;
 };
 
-export const updateStudentProfileImage = async ({userId,profile_image}) => {
+export const updateStudentProfileImage = async ({ userId, profile_image }) => {
   const response = await axios.patch(
     `${API_URL}/users/updateProfileImage/${userId}`,
-    { profile_imageURL:profile_image },
+    { profile_imageURL: profile_image },
     {
       headers: {
         "Content-Type": "application/json",
@@ -240,4 +245,18 @@ export const updateStudentProfileImage = async ({userId,profile_image}) => {
   );
 
   return response.data.data;
+};
+
+export const getSingleMentorDetails = async (mentorId) => {
+  const response = await axios.get(
+    `${API_URL}/mentor/getMentorDetails/${mentorId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Adjust according to your token logic
+      },
+    }
+  );
+  // console.log(response.data);
+  return response.data.data.data;
 };
