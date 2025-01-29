@@ -34,7 +34,7 @@ const StudentProfile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const BUCKET_NAME = "shikshadost-studymaterial";
   const REGION = "ap-south-1";
-  console.log(user);
+  // console.log(user);
   useEffect(() => {
     if (!user) {
       navigate("/register");

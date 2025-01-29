@@ -116,7 +116,7 @@ const Header = () => {
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={user?.profile_imageURL} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               {/* <span>
@@ -149,7 +149,7 @@ const Header = () => {
 
                 <div className="flex flex-col ">
                   <a
-                    href="my-profile"
+                    href="/my-profile"
                     className="group px-4 py-2 hover:translate-x-2 hover:text-green-500 transition-transform"
                   >
                     Your Profile

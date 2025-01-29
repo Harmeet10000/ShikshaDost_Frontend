@@ -214,7 +214,7 @@ export const handleLikeOnPost = async (blogId) => {
     }
   );
   console.log(response);
-  return response.data.data.blog;
+  return response.data;
 };
 
 export const handleShareOnPost = async (blogId) => {

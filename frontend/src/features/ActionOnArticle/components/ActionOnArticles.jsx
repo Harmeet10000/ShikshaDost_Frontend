@@ -74,13 +74,23 @@ const ActionOnArticles = ({ articleDetails, setArticleDetails }) => {
 
   //mutation for like functionality
   const { mutate } = useMutation(handleLikeOnPost, {
-    onSuccess: () => {
-      setArticleDetails((prev) => ({
-        ...prev,
-        likes: prev.likes + 1,
-      }));
+    onSuccess: (data) => {
+      console.log(data);
+      if (data.action === "like") {
+        setArticleDetails((prev) => ({
+          ...prev,
+          likes: prev.likes + 1,
+        }));
+        
+      } else {
+        setArticleDetails((prev) => ({
+          ...prev,
+          likes: prev.likes - 1,
+        }));
+      }
 
-      toast.success("Blog liked");
+      toast.success(`blog ${data.action === "like"?"liked":"disliked"}`);
+     
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Failed to like post.");

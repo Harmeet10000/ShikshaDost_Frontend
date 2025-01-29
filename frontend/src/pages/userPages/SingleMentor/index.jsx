@@ -10,18 +10,41 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoArrowLeft } from "react-icons/go";
 import { MdCurrencyRupee, MdTimer } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
-import { extractDate } from "@/utils/extractDate";
+import { addMinutes, extractDate } from "@/utils/extractDate";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { BiRupee } from "react-icons/bi";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useAuth } from "@/context/AuthContext";
+
+//code-splitting
+const ProfileIntro = React.lazy(() => import("./ProfileIntro"));
+const ProfileOtherDetails = React.lazy(() => import("./ProfileOtherDetails"));
+const MentorReviews = React.lazy(() => import("./MentorReviews"));
 
 const SingleMentor = () => {
+  const {user} = useAuth();
   const { mentorId } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ date: "" });
   const [formattedDate, setFormattedDate] = useState("");
   const [formattedTime, setFormattedTime] = useState("");
+  const [date, setDate] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [availableMessage, setAvailableMessage] = useState("");
+  const token = Cookies.get("authToken");
+  console.log(token);
+  const mentorshipCharges = 100;
+  const platformCharges = 20;
+  const total = mentorshipCharges + platformCharges;
 
   const {
     data: mentorDetails,
@@ -43,15 +66,32 @@ const SingleMentor = () => {
     return <div>Error fetching mentors. Please try again later.</div>;
   }
 
-  const handleDateChange = (e) => {
+  const handleDateChange = async (e) => {
     setFormData({ ...formData, date: e.target.value });
+    const { date, formattedDate, formattedTime } = extractDate(formData.date);
+
+    setDate(date);
+    setFormattedDate(formattedDate);
+    setFormattedTime(formattedTime);
+    setNewTime(addMinutes(formattedTime, 15));
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/v1/mentor/checkUnavailability/${mentorId}?date=${date}&slot=${formattedTime}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        setAvailableMessage(response.data.data.message);
+      }
+    } catch (error) {}
   };
 
   const handleContinue = () => {
-    const { formattedDate, formattedTime } = extractDate(formData.date);
-    console.log(formattedDate, formattedTime);
-    setFormattedDate(formattedDate);
-    setFormattedTime(formattedTime);
+    console.log(date, formattedDate, formattedTime);
     setStep(step + 1);
   };
 
@@ -59,60 +99,142 @@ const SingleMentor = () => {
     setStep(step - 1);
   };
 
+  const handlePayment = async () => {
+    try {
+      const {
+        data: { key },
+      } = await axios.get("http://localhost:8000/api/v1/payment/getkey", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(key);
+      const {
+        data: { order },
+      } = await axios.post(
+        "http://localhost:8000/api/v1/payment/checkout",
+        { amount: 100 },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(order);
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/mentorship/create`,
+        {
+          date,
+          slot: formattedTime,
+          time: "15 min",
+          mentorId,
+          razorpay_order_id: order.id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+
+      const options = {
+        key,
+        amount: order.amount,
+        currency: "INR",
+        name: "6 Pack Programmer",
+        description: "Tutorial of RazorPay",
+        image: "",
+        order_id: order.id,
+        callback_url: "http://localhost:8000/api/v1/users/paymentverification",
+        prefill: {
+          name: user.name || "", // Prefill user's name
+          email: user.email || "", // Prefill user's email
+          contact: user.contact || "", // Prefill user's contact
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#121212",
+        },
+      };
+      const razor = new window.Razorpay(options);
+      razor.open();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
       <div className="px-10  flex py-10 gap-x-10">
         {/* Profile Section */}
         <div
-          className="rounded-xl p-8 text-white"
+          className="rounded-xl p-8 text-white h-[300px]"
           style={{
             backgroundColor: "#172e59",
             backgroundImage:
               "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2)), repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 10px, transparent 10px, transparent 20px)",
           }}
         >
-          <div className="flex flex-col items-center">
-            <img
-              src={mentorDetails?.profile_imageURL}
-              alt={mentorDetails?.name}
-              className="w-32 h-32 rounded-full object-cover border-4 border-white mb-4"
+          <React.Suspense
+            fallback={
+              <div className="flex flex-col gap-y-4 justify-center items-center">
+                <Skeleton className="w-24 h-24 rounded-full bg-gray-100" />
+                <Skeleton className="w-48 h-2 rounded-full bg-gray-100" />
+                <Skeleton className="w-48 h-2 rounded-full bg-gray-100" />
+              </div>
+            }
+          >
+            <ProfileIntro
+              mentorDetails={mentorDetails}
+              setIsDialogOpen={setIsDialogOpen}
             />
-            <h1 className="text-2xl font-bold mb-2 text-center">
-              {mentorDetails?.name}
-            </h1>
-            <p className="text-sm text-gray-300 mb-4 text-center">
-              {mentorDetails?.bio}
-            </p>
-            <div className="flex items-center gap-4">
-              <button
-                className="px-4 py-1 text-sm font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                Book 1:1 Session
-              </button>
-            </div>
-          </div>
+          </React.Suspense>
         </div>
 
-        <div className="flex-1">
-          <div>
-            <h2 className="text-xl font-semibold mb-4">About Mentor</h2>
-            <p className="text-gray-700">{mentorDetails?.desc}</p>
-          </div>
+        <div className="flex-1 space-y-5">
+          <React.Suspense
+            fallback={
+              <div className="space-y-5">
+                <div className="space-y-3">
+                  <Skeleton className="w-16 h-4 bg-gray-100 rounded-lg" />
+                  <Skeleton className="w-64 h-16 bg-gray-100 rounded-lg" />
+                </div>
 
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {mentorDetails?.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-md"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+                <div className="space-y-3">
+                  <Skeleton className="w-8 h-2 bg-gray-100 rounded-lg" />
+                  <div className="flex flex-wrap gap-x-2">
+                    <Skeleton className="w-16 h-4 bg-gray-100 rounded-lg" />
+                    <Skeleton className="w-16 h-4 bg-gray-100 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            <ProfileOtherDetails mentorDetails={mentorDetails} />
+          </React.Suspense>
+          <React.Suspense
+            fallback={
+              <div>
+                <h1>Reviews</h1>
+                <div>
+                  <div>
+                    <Skeleton className="w-64 h-64 bg-gray-100 rounded-lg" />
+                  </div>
+                  <div>
+                    <Skeleton className="w-64 h-64 bg-gray-100 rounded-lg" />
+                  </div>
+                </div>
+              </div>
+            }
+          >
+            <MentorReviews />
+          </React.Suspense>
         </div>
       </div>
 
@@ -124,6 +246,7 @@ const SingleMentor = () => {
               <motion.div
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
+                z
                 exit={{ x: "-100%" }}
                 transition={{ duration: 0.3 }}
               >
@@ -183,6 +306,7 @@ const SingleMentor = () => {
                       value={formData.date}
                       onChange={handleDateChange}
                     />
+                    <p>{availableMessage}</p>
                   </div>
 
                   <button
@@ -204,8 +328,8 @@ const SingleMentor = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="space-y-4">
-                  <div className="flex items-center gap-x-4 text-black border-b-2 pb-2">
-                    <span onClick={handleBack} className="text-black">
+                  <div className="flex items-center gap-x-4 text-white bg-[#172e59] rounded-lg p-2">
+                    <span onClick={handleBack} className="text-white">
                       {" "}
                       <GoArrowLeft />
                     </span>
@@ -221,25 +345,72 @@ const SingleMentor = () => {
 
                   <h2 className="text-xl font-bold">Confirm Your Details</h2>
                   <div className="bg-gray-100 p-4 rounded-lg">
-                    <div></div>
                     <div className="flex justify-between">
                       <div className="flex flex-col">
-                        <span>{formattedDate}</span>
-                        <span>{formattedTime}</span>
+                        <span className="font-bold">{formattedDate}</span>
+                        <span>
+                          {formattedTime}-{newTime}
+                        </span>
                       </div>
-                      <button className="p-2 border rounded-full text-white bg-black">
+                      <button
+                        className="p-2 border rounded-full text-white bg-black"
+                        onClick={() => setStep(step - 1)}
+                      >
                         {" "}
                         Change
                       </button>
                     </div>
                   </div>
-                  
-                  <button
-                    type="button"
-                    className="px-4 py-2 text-white bg-black rounded-md hover:bg-blue-700"
-                  >
-                    Confirm Booking
-                  </button>
+
+                  <div className="order-summary max-w-md mx-auto mt-10">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xl font-bold">Order Summary</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsOpen(!isOpen)}
+                        aria-label="Toggle Order Details"
+                      >
+                        {isOpen ? <ChevronUp /> : <ChevronDown />}
+                      </Button>
+                    </div>
+
+                    {isOpen && (
+                      <div className="space-y-4 text-sm">
+                        <div className="flex justify-between">
+                          <span>1:1 Mentorship Charges</span>
+                          <span className="flex items-center gap-x-2">
+                            <BiRupee /> {mentorshipCharges.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Platform Charges</span>
+                          <span className="flex items-center gap-x-2">
+                            <BiRupee /> {platformCharges.toFixed(2)}
+                          </span>
+                        </div>
+                        <hr className="border-gray-200" />
+                        <div className="flex justify-between font-bold text-base">
+                          <span>Total</span>
+                          <span className="flex items-center gap-x-2">
+                            <BiRupee /> {total.toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between items-center border rounded-lg shadow-lg p-3">
+                    <button className="flex justify-center items-center fap-x-2">
+                      <BiRupee /> {total.toFixed(2)}
+                    </button>
+                    <button
+                      type="button"
+                      className="px-4 py-2 text-white bg-black rounded-md hover:bg-blue-700"
+                      onClick={handlePayment}
+                    >
+                      Confirm and Pay
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             )}
