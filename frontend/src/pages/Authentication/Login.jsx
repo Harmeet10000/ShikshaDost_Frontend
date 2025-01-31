@@ -24,6 +24,7 @@ const Login = () => {
       login(data?.result.user);
       console.log("Login Successful:", data);
       // Store token or handle successful login
+      console.log(data);
       if (data?.status === "success") {
         sessionStorage.setItem("userData", JSON.stringify(data?.result.user));
         Cookies.set("authToken", data?.token);

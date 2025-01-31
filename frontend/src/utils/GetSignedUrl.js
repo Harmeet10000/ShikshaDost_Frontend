@@ -3,11 +3,11 @@ import Cookies from "js-cookie";
 
 const token = Cookies.get("authToken");
 
-export const getSignedUrl = async (filename, contentType,routePath) => {
+export const getSignedUrl = async (filename, contentType, routePath) => {
   try {
-    console.log(filename,contentType,routePath);
+    console.log(filename, contentType, routePath);
     const response = await axios.post(
-        `http://localhost:8000/api/v1/${routePath}/getUploadS3URL`    ,
+      `http://localhost:8000/api/v1/${routePath}/getUploadS3URL`,
       { filename, contentType, destination: "blogs" },
       {
         headers: {

@@ -1,20 +1,35 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useArticles } from "@/context/ArticleContext";
+import { fetchLatestArticles } from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
 
 import React from "react";
 import { Link } from "react-router-dom";
 
 const LatestArticles = () => {
-  const { articles } = useArticles();
-  console.log(articles);
+  const {
+    data: latestArticles = [],
+    isLoading,
+    isError,
+    refetch,
+    // setData: setArticles, // Allows updating the data directly
+  } = useQuery(["latestArticles"], fetchLatestArticles);
+
+  console.log(latestArticles);
+  if (isLoading) {
+    return <div>...loading</div>;
+  }
+
+  if (isError) {
+    return <div>...error</div>;
+  }
   return (
     <div className="latest-articles-list flex flex-col gap-y-5">
-      {articles?.map((article, i) => (
+      {latestArticles?.map((article, i) => (
         <Link
           to={`/articles/${article.slug}`}
           key={article._id}
           className={`${
-            i === articles.length - 1
+            i === latestArticles.length - 1
               ? "border-none"
               : "border-b-2 border-gray-300"
           } py-3`}

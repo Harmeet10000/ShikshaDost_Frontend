@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { useArticles } from "@/context/ArticleContext";
+
 import { Link } from "react-router-dom";
 import {
   Carousel,
@@ -9,6 +9,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { fetchArticles, fetchProminentArticles } from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -16,29 +18,40 @@ const cardVariants = {
 };
 
 const ArticleList = () => {
-  const { articles, isLoading, isError } = useArticles();
-
-  if (isLoading) {
-    return (
-      <div className="w-full h-64 flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="w-full h-64 flex items-center justify-center">
-        <div className="text-lg text-red-500">Error loading articles...</div>
-      </div>
-    );
-  }
+  const {
+      data: prominentArticles,
+      isLoading,
+      isError,
+    } = useQuery({
+      queryKey: ["prominentArticles"],
+      queryFn: async () => {
+        const cachedArticles = localStorage.getItem("prominent-articles");
+        if (cachedArticles) {
+          return JSON.parse(cachedArticles);
+        }
+  
+        const fetchedProminentArticles = await fetchProminentArticles();
+        localStorage.setItem("prominent-articles", JSON.stringify(fetchedProminentArticles));
+        return fetchedProminentArticles;
+      },
+      staleTime: 1000 * 60 * 10, // Cache for 10 minutes
+      refetchOnWindowFocus: false, // Prevent refetching on window focus
+    });
+  
+    if (isLoading) {
+      return <div>...loading</div>;
+    }
+  
+    if (isError) {
+      return <div>...error</div>;
+    }
+  
 
   return (
     <div className="w-full px-2 sm:px-4 py-2">
       <Carousel className="w-full">
         <CarouselContent className="-ml-1">
-          {articles?.map((article) => (
+          {prominentArticles?.map((article) => (
             <CarouselItem
               key={article._id}
               className="pl-1 basis-full sm:basis-1/2 lg:basis-1/2 xl:basis-1/3"

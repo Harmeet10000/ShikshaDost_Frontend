@@ -18,16 +18,38 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useArticles } from "@/context/ArticleContext";
+// import { useArticles } from "@/context/ArticleContext";
+import { fetchArticles } from "@/services/api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const ManageArticles = () => {
-  const { articles, isLoading, isError } = useArticles();
+  const queryClient = useQueryClient();
+  const {
+    data: articles,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["articles"],
+    queryFn: async () => {
+      const cachedArticles = localStorage.getItem("articles");
+      if (cachedArticles) {
+        return JSON.parse(cachedArticles);
+      }
+
+      const fetchedArticles = await fetchArticles();
+      localStorage.setItem("articles", JSON.stringify(fetchedArticles));
+      return fetchedArticles;
+    },
+    staleTime: 1000 * 60 * 10, // Cache for 10 minutes
+    refetchOnWindowFocus: false, // Prevent refetching on window focus
+  });
+
   const token = Cookies.get("authToken");
 
   const handleFeatureArticle = async (articleId) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/v1/blogs/feature/${articleId}`,
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/blogs/toggleProminentBlog/${articleId}`,
         {},
         {
           headers: {
@@ -38,6 +60,19 @@ const ManageArticles = () => {
         }
       );
       console.log(response);
+      if (response.status === 200) {
+        // Update localStorage
+        const updatedArticles = articles.map((article) =>
+          article._id === articleId
+            ? { ...article, isProminent: !article.isProminent }
+            : article
+        );
+
+        localStorage.setItem("articles", JSON.stringify(updatedArticles));
+
+        // Update React Query cache
+        queryClient.setQueryData(["articles"], updatedArticles);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -66,6 +101,7 @@ const ManageArticles = () => {
               <TableHead className="w-[100px]">Sr. No.</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Featured</TableHead>
+              <TableHead>Prominent</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -75,6 +111,7 @@ const ManageArticles = () => {
                 <TableCell className="font-medium">{index + 1}</TableCell>
                 <TableCell>{article.title}</TableCell>
                 <TableCell>{article.isFeatured ? "Yes" : "No"}</TableCell>
+                <TableCell>{article.isProminent ? "Yes" : "No"}</TableCell>
                 <TableCell className="flex items-center gap-x-2">
                   <TooltipProvider>
                     <Tooltip>

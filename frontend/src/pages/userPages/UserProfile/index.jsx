@@ -66,6 +66,7 @@ const StudentProfile = () => {
         compressedImage.type,
         "users"
       );
+      console.log("Signed URL:", signedUrl);
       const sanitizedPath = replaceSpacesInPath(path);
       // console.log(signedUrl);
       await axios.put(signedUrl, compressedImage, {

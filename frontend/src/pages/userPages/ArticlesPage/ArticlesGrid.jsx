@@ -3,7 +3,7 @@ import React from "react";
 const LatestArticles = React.lazy(() => import("./LatestArticles"));
 const FeaturedArticles = React.lazy(() => import("./FeaturedArticles"));
 const SuggestedArticles = React.lazy(() => import("./SuggestedArticles"));
-const ArticlesGrid = () => {
+const ArticlesGrid = ({articles}) => {
   return (
     <div className="xl:grid grid-cols-12 px-6 xl:px-0 py-10 gap-10">
       <div className="col-span-8 mb-5">
@@ -17,7 +17,7 @@ const ArticlesGrid = () => {
           <div>
             <h1 className="text-3xl font-bold mb-3">Suggested Articles</h1>
             <React.Suspense fallback={<SkeletonLoader />}>
-              <SuggestedArticles />
+              <SuggestedArticles articles={articles} />
             </React.Suspense>
           </div>
         </section>
@@ -25,7 +25,7 @@ const ArticlesGrid = () => {
       <div className="col-span-4 ">
         <h1 className="text-3xl font-bold mb-3">Featured Articles</h1>
         <React.Suspense fallback={<SkeletonLoader />}>
-          <FeaturedArticles />
+          <FeaturedArticles articles={articles} />
         </React.Suspense>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import React, { useState, Suspense, lazy } from "react";
 import { motion } from "framer-motion";
-import { useStudyMaterial } from "@/context/StudyMaterialContext";
+import { fetchStudyMaterials } from "@/services/api";
+import { useQuery } from "@tanstack/react-query";
 
 // Lazy-loaded components for code splitting
 const JeeMaterial = lazy(() =>
@@ -18,20 +19,56 @@ const AddStudyMaterial = lazy(() =>
 
 const StudyMaterialSection = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const { studyMaterials, error } = useStudyMaterial();
-  
-  
+  // const { studyMaterials, error } = useStudyMaterial();
 
-  const jeeStudyMaterial = studyMaterials.filter((material)=> material.category === "jee");
-  const neetStudyMaterial = studyMaterials.filter((material)=> material.category === "neet");
-  const cuetStudyMaterial = studyMaterials.filter((material)=> material.category === "cuet");
+  const {
+    data: studyMaterials,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["studyMaterials"],
+    queryFn: fetchStudyMaterials,
+    staleTime: 1000 * 60 * 10, // Cache for 10 minutes
+    refetchOnWindowFocus: false, // Prevent refetching on window focus
+  });
+
+  if (isLoading) {
+    return <div>...loading</div>;
+  }
+
+  console.log(studyMaterials);
+
+  const jeeStudyMaterial = studyMaterials.filter(
+    (material) => material.category === "jee"
+  );
+  const neetStudyMaterial = studyMaterials.filter(
+    (material) => material.category === "neet"
+  );
+  const cuetStudyMaterial = studyMaterials.filter(
+    (material) => material.category === "cuet"
+  );
 
   // console.log(jeeStudyMaterial,neetStudyMaterial,cuetStudyMaterial)
   // Tab names and corresponding lazy-loaded components
   const tabs = [
-    { label: "JEE", component: <JeeMaterial jeeStudyMaterial={jeeStudyMaterial} error={error}/> },
-    { label: "NEET", component: <NeetMaterial neetStudyMaterial={neetStudyMaterial} error={error}/> },
-    { label: "CUET", component: <CuetMaterial cuetStudyMaterial={cuetStudyMaterial} error={error}/> },
+    {
+      label: "JEE",
+      component: (
+        <JeeMaterial jeeStudyMaterial={jeeStudyMaterial} error={isError} />
+      ),
+    },
+    {
+      label: "NEET",
+      component: (
+        <NeetMaterial neetStudyMaterial={neetStudyMaterial} error={isError} />
+      ),
+    },
+    {
+      label: "CUET",
+      component: (
+        <CuetMaterial cuetStudyMaterial={cuetStudyMaterial} error={isError} />
+      ),
+    },
     { label: "Add Material", component: <AddStudyMaterial /> },
   ];
 

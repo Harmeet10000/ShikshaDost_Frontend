@@ -1,12 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useArticles } from "@/context/ArticleContext";
 
 import React from "react";
 import { Link } from "react-router-dom";
 
-const FeaturedArticles = () => {
-  const { articles } = useArticles();
-  console.log(articles);
+const FeaturedArticles = ({articles}) => {
+  // const { articles } = useArticles();
+  // console.log(articles);
   return (
     <div className="latest-articles-list flex flex-col gap-y-5">
       {articles?.map((article, i) => (

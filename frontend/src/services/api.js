@@ -260,3 +260,82 @@ export const getSingleMentorDetails = async (mentorId) => {
   // console.log(response.data);
   return response.data.data.data;
 };
+
+export const fetchArticles = async () => {
+  
+  const response = await axios.get(
+    "http://localhost:8000/api/v1/blogs/getAllBlogs",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+
+  
+  return response.data.data.data; // Ensure the API response matches your structure
+};
+
+export const fetchLatestArticles = async () => {
+  const storedLatestArticles = localStorage.getItem("latest-articles");
+  if (storedLatestArticles) {
+    return JSON.parse(storedLatestArticles);
+  }
+  const response = await axios.get(
+    "http://localhost:8000/api/v1/blogs/getLatestBlogs",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+  console.log(response);
+  localStorage.setItem(
+    "latest-articles",
+    JSON.stringify(response.data.data)
+  );
+  return response.data.data; // Ensure the API response matches your structure
+};
+
+export const fetchProminentArticles = async () => {
+  
+  const response = await axios.get(
+    "http://localhost:8000/api/v1/blogs/getProminentBlogs",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+  console.log(response);
+  
+  return response.data.data; // Ensure the API response matches your structure
+};
+
+export const fetchStudyMaterials = async () => {
+  const storedStudyMaterials = localStorage.getItem("study-material");
+  if (storedStudyMaterials) {
+    return JSON.parse(storedStudyMaterials);
+  }
+  const response = await axios.get(
+    "http://localhost:8000/api/v1/material/getMaterial",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  console.log(response);
+  localStorage.setItem(
+    "study-material",
+    JSON.stringify(response.data.data.data)
+  );
+
+  // setStudyMaterials(response.data.data.data); // Assuming the data is directly in the response
+  return response.data.data.data;
+};
