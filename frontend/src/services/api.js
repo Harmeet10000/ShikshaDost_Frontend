@@ -278,10 +278,7 @@ export const fetchArticles = async () => {
 };
 
 export const fetchLatestArticles = async () => {
-  const storedLatestArticles = localStorage.getItem("latest-articles");
-  if (storedLatestArticles) {
-    return JSON.parse(storedLatestArticles);
-  }
+  
   const response = await axios.get(
     "http://localhost:8000/api/v1/blogs/getLatestBlogs",
     {
@@ -291,11 +288,7 @@ export const fetchLatestArticles = async () => {
       withCredentials: true,
     }
   );
-  console.log(response);
-  localStorage.setItem(
-    "latest-articles",
-    JSON.stringify(response.data.data)
-  );
+  
   return response.data.data; // Ensure the API response matches your structure
 };
 
@@ -338,4 +331,22 @@ export const fetchStudyMaterials = async () => {
 
   // setStudyMaterials(response.data.data.data); // Assuming the data is directly in the response
   return response.data.data.data;
+};
+
+
+export const fetchUserMentorships = async () => {
+  
+  const response = await axios.get(
+    "http://localhost:8000/api/v1/users/get",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    }
+  );
+  // console.log(response);
+  
+  return response.data.data.data; // Ensure the API response matches your structure
 };

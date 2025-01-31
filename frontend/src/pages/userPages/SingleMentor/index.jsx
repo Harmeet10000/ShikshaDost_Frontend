@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Lock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { GoArrowLeft } from "react-icons/go";
 import { MdCurrencyRupee, MdTimer } from "react-icons/md";
@@ -22,14 +22,24 @@ import { BiRupee } from "react-icons/bi";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
+import { Select } from "@radix-ui/react-select";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 //code-splitting
 const ProfileIntro = React.lazy(() => import("./ProfileIntro"));
 const ProfileOtherDetails = React.lazy(() => import("./ProfileOtherDetails"));
 const MentorReviews = React.lazy(() => import("./MentorReviews"));
 
+const countryOptions = [
+  { value: "+91", label: "🇮🇳 +91" },
+  { value: "+1", label: "🇺🇸 +1" },
+  { value: "+44", label: "🇬🇧 +44" },
+  { value: "+61", label: "🇦🇺 +61" },
+];
+
 const SingleMentor = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const { mentorId } = useParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [step, setStep] = useState(1);
@@ -41,6 +51,9 @@ const SingleMentor = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [availableMessage, setAvailableMessage] = useState("");
   const token = Cookies.get("authToken");
+  const [countryCode, setCountryCode] = useState(countryOptions[1]);
+  const [phoneNumber, setPhoneNumber] = useState("");
+
   console.log(token);
   const mentorshipCharges = 100;
   const platformCharges = 20;
@@ -130,6 +143,7 @@ const SingleMentor = () => {
           slot: formattedTime,
           time: "15 min",
           mentorId,
+          userPhone: phoneNumber,
           razorpay_order_id: order.id,
         },
         {
@@ -149,7 +163,7 @@ const SingleMentor = () => {
         description: "Tutorial of RazorPay",
         image: "",
         order_id: order.id,
-        callback_url: "http://localhost:8000/api/v1/users/paymentverification",
+        callback_url: "http://localhost:8000/api/v1/payment/paymentverification",
         prefill: {
           name: user.name || "", // Prefill user's name
           email: user.email || "", // Prefill user's email
@@ -249,6 +263,7 @@ const SingleMentor = () => {
                 z
                 exit={{ x: "-100%" }}
                 transition={{ duration: 0.3 }}
+                className="h-[500px]"
               >
                 <div className="bg-[#172e59] text-white rounded-xl p-4 space-y-5 mb-5">
                   <div className="flex gap-x-2 items-center">
@@ -286,7 +301,7 @@ const SingleMentor = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mb-5">
+                {/* <div className="mb-5">
                   <p>
                     Prepare for your upcoming interview with me! I will assist
                     you with tips to get yourself ahead before even starting. -
@@ -294,7 +309,7 @@ const SingleMentor = () => {
                     interview. I will share my LinkedIn interview experience
                     with you!
                   </p>
-                </div>
+                </div> */}
                 <form className="space-y-4">
                   <div>
                     <label className="block text-lg font-medium mb-2 font-bold">
@@ -326,6 +341,7 @@ const SingleMentor = () => {
                 animate={{ x: 0 }}
                 exit={{ x: "-100%" }}
                 transition={{ duration: 0.3 }}
+                className="h-[500px] "
               >
                 <div className="space-y-4">
                   <div className="flex items-center gap-x-4 text-white bg-[#172e59] rounded-lg p-2">
@@ -344,7 +360,7 @@ const SingleMentor = () => {
                   </div>
 
                   <h2 className="text-xl font-bold">Confirm Your Details</h2>
-                  <div className="bg-gray-100 p-4 rounded-lg">
+                  <div className="bg-gray-100 p-4 ">
                     <div className="flex justify-between">
                       <div className="flex flex-col">
                         <span className="font-bold">{formattedDate}</span>
@@ -359,6 +375,26 @@ const SingleMentor = () => {
                         {" "}
                         Change
                       </button>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="mobile">Mobile Number</Label>
+                    <div className="flex items-center gap-2">
+                      <Select
+                        options={countryOptions}
+                        value={countryCode}
+                        onChange={setCountryCode}
+                        className="w-28"
+                      />
+                      <Input
+                        id="mobile"
+                        type="tel"
+                        placeholder="Enter your number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="flex-1"
+                      />
                     </div>
                   </div>
 
@@ -399,7 +435,18 @@ const SingleMentor = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex justify-between items-center border rounded-lg shadow-lg p-3">
+
+                  <div className="flex justify-between items-center bg-gray-100 p-3">
+                    <div className="text-sm flex">
+                      <span className="text-sm">
+                        <Lock />
+                      </span>
+                      Payments are 100% secure & encrypted
+                    </div>
+                    <div className="text-sm">Terms | Privacy</div>
+                  </div>
+
+                  <div className="flex justify-between items-center border  shadow-lg p-3">
                     <button className="flex justify-center items-center fap-x-2">
                       <BiRupee /> {total.toFixed(2)}
                     </button>

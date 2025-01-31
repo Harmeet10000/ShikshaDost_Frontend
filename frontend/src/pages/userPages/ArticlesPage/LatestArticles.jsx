@@ -1,3 +1,4 @@
+import CircleLoader from "@/components/loader/CircleLoader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchLatestArticles } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
@@ -16,11 +17,11 @@ const LatestArticles = () => {
 
   console.log(latestArticles);
   if (isLoading) {
-    return <div>...loading</div>;
+    return <div><CircleLoader/></div>;
   }
 
   if (isError) {
-    return <div>...error</div>;
+    return <div className="text-red-500">Error in fetching articles</div>;
   }
   return (
     <div className="latest-articles-list flex flex-col gap-y-5">

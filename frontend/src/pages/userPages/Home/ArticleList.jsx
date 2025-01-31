@@ -19,33 +19,27 @@ const cardVariants = {
 
 const ArticleList = () => {
   const {
-      data: prominentArticles,
-      isLoading,
-      isError,
-    } = useQuery({
-      queryKey: ["prominentArticles"],
-      queryFn: async () => {
-        const cachedArticles = localStorage.getItem("prominent-articles");
-        if (cachedArticles) {
-          return JSON.parse(cachedArticles);
-        }
-  
-        const fetchedProminentArticles = await fetchProminentArticles();
-        localStorage.setItem("prominent-articles", JSON.stringify(fetchedProminentArticles));
-        return fetchedProminentArticles;
-      },
-      staleTime: 1000 * 60 * 10, // Cache for 10 minutes
-      refetchOnWindowFocus: false, // Prevent refetching on window focus
-    });
-  
-    if (isLoading) {
-      return <div>...loading</div>;
-    }
-  
-    if (isError) {
-      return <div>...error</div>;
-    }
-  
+    data: prominentArticles,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["prominentArticles"],
+    queryFn: async () => {
+      const fetchedProminentArticles = await fetchProminentArticles();
+
+      return fetchedProminentArticles;
+    },
+    staleTime: 1000 * 60 * 10, // Cache for 10 minutes
+    refetchOnWindowFocus: false, // Prevent refetching on window focus
+  });
+
+  if (isLoading) {
+    return <div>...loading</div>;
+  }
+
+  if (isError) {
+    return <div>...error</div>;
+  }
 
   return (
     <div className="w-full px-2 sm:px-4 py-2">
@@ -64,7 +58,7 @@ const ArticleList = () => {
                 className="h-full"
               >
                 <div className="bg-white border rounded-lg shadow-lg overflow-hidden p-2 sm:p-3 h-full flex flex-col">
-                  <Link 
+                  <Link
                     to={`/articles/${article.slug}`}
                     className="block w-full overflow-hidden"
                   >
@@ -94,11 +88,14 @@ const ArticleList = () => {
                           {article.author.name}
                         </h3>
                         <p className="text-xs sm:text-sm text-gray-500 truncate">
-                          {new Date(article.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          {new Date(article.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
                         </p>
                       </div>
                     </div>
