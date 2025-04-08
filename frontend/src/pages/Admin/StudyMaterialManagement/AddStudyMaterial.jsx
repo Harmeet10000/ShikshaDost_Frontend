@@ -15,7 +15,6 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useStudyMaterial } from "@/context/StudyMaterialContext";
 
 const AddStudyMaterial = () => {
   const [category, setCategory] = useState("");
